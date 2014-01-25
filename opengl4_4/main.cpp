@@ -363,6 +363,10 @@ void mouseButton(int button, int state, int x, int y)
 		}
 	}
 }
+
+void rotateIdle(){
+	glutPostRedisplay();
+}
  
 int main(int argc, char **argv) 
 {
@@ -375,7 +379,7 @@ int main(int argc, char **argv)
     glutSetWindowTitle(s);
 	// call back functions
     glutDisplayFunc(renderScene);
-    glutIdleFunc(renderScene);
+    glutIdleFunc(rotateIdle);
     glutReshapeFunc(changeSize);
 
 	glutMouseFunc(mouseButton);
