@@ -3,11 +3,24 @@
 #include "glew\include\GL\glew.h"
 #include "glut\glut.h"
 #include <memory.h>
+#include <stack>
 #include <math.h>
 #include "mymath.h"
- 
+using namespace std;
 #define PI       3.14159265358979323846
-
+static bool gl_modeview=true;
+static bool gl_projection=false;
+static stack<float*> modeview_stack;
+static stack<float*> project_stack;
+void my_gl_translatef(float x, float y, float z);
+void my_gl_scalaf(float x, float y, float z);
+void my_gl_rotatef(float ang,float x, float y, float z);
+void my_gl_pushMatrix();
+void my_gl_popMatrix();
+void my_gl_loadidentity();
+void my_gl_matrixmode(GLenum num);
+void my_gl_perspective(float fovy, float aspect, float zNear, float zFar);
+void gl_init();
 void setTransMatrix(float *mat, float x, float y, float z);
 void multiplyMatrix(float *a, float *b);
 void xProduct( float *a, float *b, float *res);
@@ -37,13 +50,13 @@ float colors1[] = { 1.0f, 0.0f, 0.0f, 1.0f,
 // shader names
 char *vertexFileName = "vertex.txt";
 char *fragmentFileName = "frag.txt";
- 
+float ang=0;
 // program and shader Id
 GLuint p,v,f;
  
 // vert attrib locations
-GLuint vertexLoc, colorLoc;
- 
+GLuint vertexLoc, colorLoc,axisLoc,angLoc;
+GLuint fovLoc,ratioLoc,nearPLoc,farPLoc;
 // uniform var locations
 GLuint projMatrixLoc, viewMatrixLoc;
  
@@ -51,12 +64,118 @@ GLuint projMatrixLoc, viewMatrixLoc;
 GLuint vert[3];
  
 // storage for matrices
-float projMatrix[16];
-float viewMatrix[16];
+float* projMatrix=new float[16];
+float* viewMatrix=new float[16];
 
 int frame=0,time,timebase=0;
 char s[50];
- 
+void gl_init()
+{
+        float* tmp=new float[16];
+        setIdentMatrix(tmp,4);
+        if(gl_projection)
+                project_stack.push(tmp);
+        else
+                modeview_stack.push(tmp);
+}
+void my_gl_translatef(float x,float y, float z)
+{
+        float *tmp=new float[16];
+        float *result=new float[16];
+        if(gl_projection)
+        {
+                if(project_stack.size()==0)
+                        gl_init();
+                result=project_stack.top();
+        }
+        else
+        {
+                if(modeview_stack.size()==0)
+                        gl_init();
+                result=modeview_stack.top();
+        }
+        setTransMatrix(tmp,x,y,z);
+        multiplyMatrix(result,tmp);
+        if(gl_projection)
+        {
+                project_stack.pop();
+                project_stack.push(result);
+        }
+        else
+        {
+                modeview_stack.pop();
+                modeview_stack.push(result);
+        }
+}
+void my_gl_scalaf(float x,float y,float z)
+{
+        float *tmp=new float[16];
+        float *result=new float[16];
+        if(modeview_stack.size()==0)
+                gl_init();
+        result=modeview_stack.top();
+        for (int i = 0; i < 4 * 4; ++i)
+            tmp[i] = 0.0f;
+        tmp[0]=x;tmp[5]=y;tmp[10]=z;
+        multiplyMatrix(result,tmp);
+        modeview_stack.pop();
+        modeview_stack.push(result);
+}
+void my_gl_rotatef(float ang,float x, float y, float z)
+{
+        float *tmp=new float[16];
+        float *result=new float[16];
+        if(gl_projection)
+        {
+                if(project_stack.size()==0)
+                        gl_init();
+                result=project_stack.top();
+        }
+        else
+        {
+                if(modeview_stack.size()==0)
+                        gl_init();
+                result=modeview_stack.top();
+        }
+        tmp=rotationMatrix(x,y,z,ang);
+        multiplyMatrix(result,tmp);
+        if(gl_projection)
+        {
+                project_stack.pop();
+                project_stack.push(result);
+        }
+        else
+        {
+                modeview_stack.pop();
+                modeview_stack.push(result);
+        }
+}
+void my_gl_pushMatrix()
+{
+        float *tmp=new float[16];
+        if(gl_projection)
+        {
+                tmp=project_stack.top();
+                project_stack.push(tmp);
+        }
+        else
+        {
+                tmp=modeview_stack.top();
+                modeview_stack.push(tmp);
+        }
+}
+void my_gl_popmatrix()
+{
+        float *tmp=new float[16];
+        if(gl_projection)
+        {
+                project_stack.pop();
+        }
+        else
+        {
+                modeview_stack.pop();
+        }
+}
 // vector opt
 // res = a cross b;
 void xProduct( float *a, float *b, float *res) 
@@ -130,28 +249,31 @@ void placeCam(float posX, float posY, float posZ, float lookX, float lookY, floa
     normalize(up);
  
     float aux[16];
- 
-    viewMatrix[0]  = right[0];
-	viewMatrix[1]  = up[0];
-	viewMatrix[2]  = -dir[0];
-	viewMatrix[3]  = 0.0f;
-    viewMatrix[4]  = right[1];
-	viewMatrix[5]  = up[1];
-	viewMatrix[6]  = -dir[1];
-	viewMatrix[7]  = 0.0f;
-    viewMatrix[8]  = right[2];
-	viewMatrix[9]  = up[2];
-	viewMatrix[10] = -dir[2];
-	viewMatrix[11] = 0.0f;
-    viewMatrix[12] = 0.0f;
-    viewMatrix[13] = 0.0f;
-    viewMatrix[14] =  0.0f;
-    viewMatrix[15] = 1.0f;
+        float* tmp=new float[16];
+    tmp[0]  = right[0];
+        tmp[1]  = up[0];
+        tmp[2]  = -dir[0];
+        tmp[3]  = 0.0f;
+    tmp[4]  = right[1];
+        tmp[5]  = up[1];
+        tmp[6]  = -dir[1];
+        tmp[7]  = 0.0f;
+    tmp[8]  = right[2];
+        tmp[9]  = up[2];
+        tmp[10] = -dir[2];
+        tmp[11] = 0.0f;
+    tmp[12] = 0.0f;
+    tmp[13] = 0.0f;
+    tmp[14] =  0.0f;
+    tmp[15] = 1.0f;
     setTransMatrix(aux, -posX, -posY, -posZ);
-    multiplyMatrix(viewMatrix, aux);
-	
-	// you should do this instead. If you want to apply rotation to your viewMatrix.
-	//multiplyMatrix(viewMatrix, rotationMatrix(0.0,0.0,1.0, 0.785)); 
+    multiplyMatrix(tmp, aux);
+        if(modeview_stack.size()==0)
+                gl_init();
+        modeview_stack.pop();
+        modeview_stack.push(tmp);
+        // you should do this instead. If you want to apply rotation to your viewMatrix.
+        
 }
 
 // Generates a rotation matrix.  Angle is in radian.
@@ -184,14 +306,19 @@ float * rotationMatrix(float x, float y, float z, float angle)
 // Projection Matrix
 void buildProjMatrix(float fov, float ratio, float nearP, float farP) {
  
+        float *tmp=new float[16];
     float f = 1.0f / tan (fov * (PI / 360.0));
-    setIdentMatrix(projMatrix,4);
-    projMatrix[0] = f / ratio;
-    projMatrix[1 * 4 + 1] = f;
-    projMatrix[2 * 4 + 2] = (farP + nearP) / (nearP - farP);
-    projMatrix[3 * 4 + 2] = (2.0f * farP * nearP) / (nearP - farP);
-    projMatrix[2 * 4 + 3] = -1.0f;
-    projMatrix[3 * 4 + 3] = 0.0f;
+    setIdentMatrix(tmp,4);
+    tmp[0] = f / ratio;
+    tmp[1 * 4 + 1] = f;
+    tmp[2 * 4 + 2] = (farP + nearP) / (nearP - farP);
+    tmp[3 * 4 + 2] = (2.0f * farP * nearP) / (nearP - farP);
+    tmp[2 * 4 + 3] = -1.0f;
+    tmp[3 * 4 + 3] = 0.0f;
+        if(project_stack.size()==0)
+                gl_init();
+        project_stack.pop();
+        project_stack.push(tmp);
 }
 
 // Transformation matrix mat with a translation
@@ -240,8 +367,25 @@ void setUniforms() {
  
     // must be called after glUseProgram
 	// set the variables for the shader
+        projMatrix=project_stack.top();
+        viewMatrix=modeview_stack.top();
+        float vec[]={0,1,0,0};
     glUniformMatrix4fv(projMatrixLoc,  1, false, projMatrix);
     glUniformMatrix4fv(viewMatrixLoc,  1, false, viewMatrix);
+        glUniform4fv(axisLoc,1,vec);
+        glUniform1f(angLoc,ang);
+
+        float ratio;
+
+    // place viewport to be the entire window
+    ratio = (1.0f * 640) / 480;
+    buildProjMatrix(53.13f, ratio, 1.0f, 30.0f);
+
+
+        glUniform1f(fovLoc,53.13);
+        glUniform1f(ratioLoc,ratio);
+        glUniform1f(nearPLoc,1);
+        glUniform1f(farPLoc,30);
 }
  
 void renderScene(void) {
@@ -259,6 +403,7 @@ void renderScene(void) {
  
     //placeCam(10,2,10,0,2,-5);
 	placeCam(0,0,0,0,0,-5);
+        //my_gl_rotatef(ang,0.0,1.0,0.0); 
     glUseProgram(p);
     setUniforms();
  
@@ -333,7 +478,12 @@ GLuint initShaders() {
     colorLoc = glGetAttribLocation(p, "color"); 
     projMatrixLoc = glGetUniformLocation(p, "projMatrix");
     viewMatrixLoc = glGetUniformLocation(p, "viewMatrix");
- 
+        axisLoc=glGetUniformLocation(p, "axis_i");
+    angLoc=glGetUniformLocation(p, "ang_i");
+        fovLoc=glGetUniformLocation(p, "fov");
+    ratioLoc=glGetUniformLocation(p, "ratio");
+        nearPLoc=glGetUniformLocation(p, "nearP");
+    farPLoc=glGetUniformLocation(p, "farP");
     return(p);
 }
 
@@ -363,7 +513,11 @@ void mouseButton(int button, int state, int x, int y)
 		}
 	}
 }
- 
+void idle()
+{
+        ang+=0.001;
+        glutPostRedisplay( );
+}
 int main(int argc, char **argv) 
 {
 	// sets up glut
@@ -375,7 +529,7 @@ int main(int argc, char **argv)
     glutSetWindowTitle(s);
 	// call back functions
     glutDisplayFunc(renderScene);
-    glutIdleFunc(renderScene);
+    glutIdleFunc(idle);
     glutReshapeFunc(changeSize);
 
 	glutMouseFunc(mouseButton);
