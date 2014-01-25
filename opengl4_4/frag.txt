@@ -1,0 +1,10 @@
+#version 330
+uniform mat4 viewMatrix, projMatrix;
+
+in vec3 Color;
+out vec4 outputF;
+ 
+void main()
+{	
+    outputF = vec4(Color,1);
+}
