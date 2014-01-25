@@ -43,6 +43,7 @@ GLuint p,v,f;
  
 // vert attrib locations
 GLuint vertexLoc, colorLoc;
+GLuint angleLoc;
  
 // uniform var locations
 GLuint projMatrixLoc, viewMatrixLoc;
@@ -53,6 +54,8 @@ GLuint vert[3];
 // storage for matrices
 float projMatrix[16];
 float viewMatrix[16];
+
+float myAngle = 0.0f;
 
 int frame=0,time,timebase=0;
 char s[50];
@@ -242,6 +245,8 @@ void setUniforms() {
 	// set the variables for the shader
     glUniformMatrix4fv(projMatrixLoc,  1, false, projMatrix);
     glUniformMatrix4fv(viewMatrixLoc,  1, false, viewMatrix);
+
+	glUniform1f(angleLoc,myAngle);
 }
  
 void renderScene(void) {
@@ -333,6 +338,7 @@ GLuint initShaders() {
     colorLoc = glGetAttribLocation(p, "color"); 
     projMatrixLoc = glGetUniformLocation(p, "projMatrix");
     viewMatrixLoc = glGetUniformLocation(p, "viewMatrix");
+	angleLoc = glGetUniformLocation(p,"ang_i");
  
     return(p);
 }
@@ -364,7 +370,13 @@ void mouseButton(int button, int state, int x, int y)
 	}
 }
 
+int iterationNumber = 0;
 void rotateIdle(){
+	myAngle += 0.01;
+	iterationNumber++;
+	if(iterationNumber%200 == 0){
+		printf("%d\n",iterationNumber);
+	}
 	glutPostRedisplay();
 }
  
