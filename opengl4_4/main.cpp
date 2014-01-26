@@ -32,9 +32,9 @@ float vertices1[] = {   -1.0f, -1.0f, -5.0f,
             1.0f, -1.0f, -5.0f,
             0.0f, 1.0f, -5.0f};
  
-float colors1[] = { 1.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-            0.0f,0.0f, 1.0f, 1.0f};
+float colors1[] = { 1.0f, 1.0f, 0.0f, 1.0f,
+            1.0f, 1.0f, 0.0f, 1.0f,
+            1.0f,1.0f, 0.0f, 1.0f};
  
  
 // shader names
@@ -344,7 +344,7 @@ void renderScene(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  
     //placeCam(10,2,10,0,2,-5);
-	placeCam(0,0,0,0,0,-5);
+	placeCam(0,0,-10,0,0,-5);
 	zrd_glRotatef(myAngle,0.0,1.0,0.0);
     glUseProgram(p);
     setUniforms();
@@ -459,7 +459,7 @@ void mouseButton(int button, int state, int x, int y)
 
 int iterationNumber = 0;
 void rotateIdle(){
-	myAngle += 0.001;
+	myAngle += 0.0005;
 	glutPostRedisplay();
 }
  
