@@ -345,6 +345,7 @@ void renderScene(void) {
  
     //placeCam(10,2,10,0,2,-5);
 	placeCam(0,0,0,0,0,-5);
+	zrd_glRotatef(myAngle,0.0,1.0,0.0);
     glUseProgram(p);
     setUniforms();
  
@@ -458,11 +459,7 @@ void mouseButton(int button, int state, int x, int y)
 
 int iterationNumber = 0;
 void rotateIdle(){
-	myAngle += 0.01;
-	iterationNumber++;
-	if(iterationNumber%200 == 0){
-		printf("%d\n",iterationNumber);
-	}
+	myAngle += 0.001;
 	glutPostRedisplay();
 }
  
