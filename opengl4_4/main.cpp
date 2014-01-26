@@ -5,6 +5,9 @@
 #include <memory.h>
 #include <math.h>
 #include "mymath.h"
+#include <stack>
+
+using namespace std;
  
 #define PI       3.14159265358979323846
 
@@ -47,6 +50,12 @@ GLuint angleLoc;
  
 // uniform var locations
 GLuint projMatrixLoc, viewMatrixLoc;
+
+//matrix stack
+static bool currentMatrix_modelView = true;
+static bool currentMatrix_projection = false;
+static stack<float*> modelViewMatrix_stack;
+static stack<float*> projectionMatrix_stack;
  
 // vert array obj Id
 GLuint vert[3];
@@ -68,6 +77,19 @@ void xProduct( float *a, float *b, float *res)
     res[0] = a[1] * b[2]  -  b[1] * a[2];
     res[1] = a[2] * b[0]  -  b[2] * a[0];
     res[2] = a[0] * b[1]  -  b[0] * a[1];
+}
+
+void zrd_glInit(){
+
+	float* init = new float[16];
+	setIdentMatrix(init,4);
+
+	if(currentMatrix_projection){
+		projectionMatrix_stack.push(init);
+	}else{
+		modelViewMatrix_stack.push(init);
+	}
+
 }
  
 // normalize a vec3
