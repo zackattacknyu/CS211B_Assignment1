@@ -47,6 +47,7 @@ GLuint p,v,f;
 // vert attrib locations
 GLuint vertexLoc, colorLoc;
 GLuint angleLoc;
+GLuint axisLocation, fovLocation, ratioLocation, nearPlaneLocation, farPlaneLocation;
  
 // uniform var locations
 GLuint projMatrixLoc, viewMatrixLoc;
@@ -61,8 +62,8 @@ static stack<float*> projectionMatrix_stack;
 GLuint vert[3];
  
 // storage for matrices
-float projMatrix[16];
-float viewMatrix[16];
+float* projMatrix = new float[16];
+float* viewMatrix = new float[16];
 
 float myAngle = 0.0f;
 
@@ -89,6 +90,37 @@ void zrd_glInit(){
 	}else{
 		modelViewMatrix_stack.push(init);
 	}
+
+}
+
+void zrd_glRotatef(float angle, float x, float y, float z){
+	float* rotMatrix = new float[16];
+	float* resultMatrix = new float[16];
+
+	if(currentMatrix_projection){
+		if(projectionMatrix_stack.size() == 0){
+			zrd_glInit();
+		}
+		resultMatrix = projectionMatrix_stack.top();
+	}else{
+		if(modelViewMatrix_stack.size() == 0){
+			zrd_glInit();
+		}
+		resultMatrix = modelViewMatrix_stack.top();
+	}
+
+	rotMatrix = rotationMatrix(x,y,z,angle);
+	multiplyMatrix(resultMatrix,rotMatrix);	
+
+	if(currentMatrix_projection){
+		projectionMatrix_stack.pop();
+		projectionMatrix_stack.push(resultMatrix);
+	}else{
+		modelViewMatrix_stack.pop();
+		modelViewMatrix_stack.push(resultMatrix);
+	}
+
+
 
 }
  
@@ -155,25 +187,33 @@ void placeCam(float posX, float posY, float posZ, float lookX, float lookY, floa
     normalize(up);
  
     float aux[16];
- 
-    viewMatrix[0]  = right[0];
-	viewMatrix[1]  = up[0];
-	viewMatrix[2]  = -dir[0];
-	viewMatrix[3]  = 0.0f;
-    viewMatrix[4]  = right[1];
-	viewMatrix[5]  = up[1];
-	viewMatrix[6]  = -dir[1];
-	viewMatrix[7]  = 0.0f;
-    viewMatrix[8]  = right[2];
-	viewMatrix[9]  = up[2];
-	viewMatrix[10] = -dir[2];
-	viewMatrix[11] = 0.0f;
-    viewMatrix[12] = 0.0f;
-    viewMatrix[13] = 0.0f;
-    viewMatrix[14] =  0.0f;
-    viewMatrix[15] = 1.0f;
+	
+	float* tempViewMatrix = new float[16];
+    tempViewMatrix[0]  = right[0];
+	tempViewMatrix[1]  = up[0];
+	tempViewMatrix[2]  = -dir[0];
+	tempViewMatrix[3]  = 0.0f;
+    tempViewMatrix[4]  = right[1];
+	tempViewMatrix[5]  = up[1];
+	tempViewMatrix[6]  = -dir[1];
+	tempViewMatrix[7]  = 0.0f;
+    tempViewMatrix[8]  = right[2];
+	tempViewMatrix[9]  = up[2];
+	tempViewMatrix[10] = -dir[2];
+	tempViewMatrix[11] = 0.0f;
+    tempViewMatrix[12] = 0.0f;
+    tempViewMatrix[13] = 0.0f;
+    tempViewMatrix[14] =  0.0f;
+    tempViewMatrix[15] = 1.0f;
     setTransMatrix(aux, -posX, -posY, -posZ);
-    multiplyMatrix(viewMatrix, aux);
+    multiplyMatrix(tempViewMatrix, aux);
+
+	if(modelViewMatrix_stack.size() == 0){
+		zrd_glInit();
+	}
+
+	modelViewMatrix_stack.pop();
+	modelViewMatrix_stack.push(tempViewMatrix);
 	
 	// you should do this instead. If you want to apply rotation to your viewMatrix.
 	//multiplyMatrix(viewMatrix, rotationMatrix(0.0,0.0,1.0, 0.785)); 
@@ -210,13 +250,20 @@ float * rotationMatrix(float x, float y, float z, float angle)
 void buildProjMatrix(float fov, float ratio, float nearP, float farP) {
  
     float f = 1.0f / tan (fov * (PI / 360.0));
-    setIdentMatrix(projMatrix,4);
-    projMatrix[0] = f / ratio;
-    projMatrix[1 * 4 + 1] = f;
-    projMatrix[2 * 4 + 2] = (farP + nearP) / (nearP - farP);
-    projMatrix[3 * 4 + 2] = (2.0f * farP * nearP) / (nearP - farP);
-    projMatrix[2 * 4 + 3] = -1.0f;
-    projMatrix[3 * 4 + 3] = 0.0f;
+	float* projectionMatrix = new float[16];
+    setIdentMatrix(projectionMatrix,4);
+    projectionMatrix[0] = f / ratio;
+    projectionMatrix[1 * 4 + 1] = f;
+    projectionMatrix[2 * 4 + 2] = (farP + nearP) / (nearP - farP);
+    projectionMatrix[3 * 4 + 2] = (2.0f * farP * nearP) / (nearP - farP);
+    projectionMatrix[2 * 4 + 3] = -1.0f;
+    projectionMatrix[3 * 4 + 3] = 0.0f;
+
+	if(projectionMatrix_stack.size() == 0){
+		zrd_glInit();
+	}
+	projectionMatrix_stack.pop();
+	projectionMatrix_stack.push(projectionMatrix);
 }
 
 // Transformation matrix mat with a translation
@@ -265,9 +312,13 @@ void setUniforms() {
  
     // must be called after glUseProgram
 	// set the variables for the shader
+	projMatrix = projectionMatrix_stack.top();
+	viewMatrix = modelViewMatrix_stack.top();
     glUniformMatrix4fv(projMatrixLoc,  1, false, projMatrix);
     glUniformMatrix4fv(viewMatrixLoc,  1, false, viewMatrix);
 
+	float vector[] = {0,1,0,0};
+	glUniform4fv(axisLocation,1,vector);
 	glUniform1f(angleLoc,myAngle);
 }
  
