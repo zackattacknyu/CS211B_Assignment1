@@ -320,6 +320,14 @@ void setUniforms() {
 	float vector[] = {0,1,0,0};
 	glUniform4fv(axisLocation,1,vector);
 	glUniform1f(angleLoc,myAngle);
+
+	float theRatio = 640.0f/480.0f;
+	buildProjMatrix(53.13f,theRatio,1.0f,30.0f);
+
+	glUniform1f(fovLocation,53.13);
+	glUniform1f(ratioLocation,theRatio);
+	glUniform1f(nearPlaneLocation,1);
+	glUniform1f(farPlaneLocation,30);
 }
  
 void renderScene(void) {
@@ -412,6 +420,11 @@ GLuint initShaders() {
     projMatrixLoc = glGetUniformLocation(p, "projMatrix");
     viewMatrixLoc = glGetUniformLocation(p, "viewMatrix");
 	angleLoc = glGetUniformLocation(p,"ang_i");
+	nearPlaneLocation = glGetUniformLocation(p,"nearP");
+	farPlaneLocation = glGetUniformLocation(p,"farP");
+	axisLocation = glGetUniformLocation(p,"axis_i");
+	fovLocation = glGetUniformLocation(p,"fov");
+	ratioLocation = glGetUniformLocation(p,"ratio");
  
     return(p);
 }
