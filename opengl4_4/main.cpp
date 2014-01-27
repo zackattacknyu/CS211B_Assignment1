@@ -39,6 +39,10 @@ float vertices2[] = {   -1.0f, -1.0f, -3.0f,
 float colors1[] = { 1.0f, 1.0f, 0.0f, 1.0f,
             1.0f, 1.0f, 0.0f, 1.0f,
             1.0f,1.0f, 0.0f, 1.0f};
+
+float colors2[] = { 1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f,0.0f, 0.0f, 1.0f};
  
  
 // shader names
@@ -63,7 +67,7 @@ static stack<float*> modelViewMatrix_stack;
 static stack<float*> projectionMatrix_stack;
  
 // vert array obj Id
-GLuint vert[3];
+GLuint vert[10];
  
 // storage for matrices
 float* projMatrix = new float[16];
@@ -292,8 +296,9 @@ void changeSize(int w, int h) {
 void setupBuffers() {
  
     GLuint buffers[2];
+	GLuint nextBuffers[2];
  
-    glGenVertexArrays(1, vert);
+    glGenVertexArrays(2, vert);
 
     // first triangle
     glBindVertexArray(vert[0]);
@@ -308,6 +313,22 @@ void setupBuffers() {
     // bind buffer for colors and copy data into buffer
     glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(colors1), colors1, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(colorLoc);
+    glVertexAttribPointer(colorLoc, 4, GL_FLOAT, 0, 0, 0);
+
+	// second triangle
+    glBindVertexArray(vert[1]);
+    // generate 2 buffers for vert and color
+	glGenBuffers(2, nextBuffers);
+    // bind buffer for vertices and copy data into buffer
+	glBindBuffer(GL_ARRAY_BUFFER, nextBuffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(vertexLoc);
+    glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, 0, 0, 0);
+ 
+    // bind buffer for colors and copy data into buffer
+    glBindBuffer(GL_ARRAY_BUFFER, nextBuffers[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colors2), colors2, GL_STATIC_DRAW);
     glEnableVertexAttribArray(colorLoc);
     glVertexAttribPointer(colorLoc, 4, GL_FLOAT, 0, 0, 0);
 }
@@ -355,6 +376,9 @@ void renderScene(void) {
  
     glBindVertexArray(vert[0]);
     glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	glBindVertexArray(vert[1]);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
   
    glutSwapBuffers();
 }
