@@ -27,22 +27,27 @@ struct vec3
 	float z;
 };
  
-// vertices for triangle
+// vertices for triangle 1
 float vertices1[] = {   -1.0f, -1.0f, -5.0f,
             1.0f, -1.0f, -5.0f,
             0.0f, 1.0f, -4.0f};
+float normals1[] = {   0.0f, -2.0f, 4.0f,
+            0.0f, -2.0f, 4.0f,
+            0.0f, -2.0f, 4.0f,};
+float colors1[] = { 1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f,0.0f, 0.0f, 1.0f};
 
+//vertices for other triangle
 float vertices2[] = {   -1.0f, -1.0f, -3.0f,
             1.0f, -1.0f, -3.0f,
             0.0f, 1.0f, -4.0f};
- 
-float colors1[] = { 1.0f, 1.0f, 0.0f, 1.0f,
-            1.0f, 1.0f, 0.0f, 1.0f,
-            1.0f,1.0f, 0.0f, 1.0f};
-
-float colors2[] = { 1.0f, 0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f, 1.0f,
-            1.0f,0.0f, 0.0f, 1.0f};
+float normals2[] = {   0.0f, 2.0f, 4.0f,
+            0.0f, 2.0f, 4.0f,
+            0.0f, 2.0f, 4.0f,};
+float colors2[] = { 0.0f, 0.0f, 1.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
+            0.0f,0.0f, 1.0f, 1.0f};
  
  
 // shader names
