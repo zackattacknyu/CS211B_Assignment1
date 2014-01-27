@@ -33,7 +33,7 @@ float vertices1[] = {   -1.0f, -1.0f, -5.0f,
             0.0f, 1.0f, -4.0f};
 float normals1[] = {   0.0f, -2.0f, 4.0f,
             0.0f, -2.0f, 4.0f,
-            0.0f, -2.0f, 4.0f,};
+            0.0f, 0.0f, 4.0f,};
 float colors1[] = { 1.0f, 0.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 0.0f, 1.0f,
             1.0f,0.0f, 0.0f, 1.0f};
@@ -44,7 +44,7 @@ float vertices2[] = {   -1.0f, -1.0f, -3.0f,
             0.0f, 1.0f, -4.0f};
 float normals2[] = {   0.0f, 2.0f, 4.0f,
             0.0f, 2.0f, 4.0f,
-            0.0f, 2.0f, 4.0f,};
+            0.0f, 0.0f, 4.0f,};
 float colors2[] = { 0.0f, 0.0f, 1.0f, 1.0f,
             0.0f, 0.0f, 1.0f, 1.0f,
             0.0f,0.0f, 1.0f, 1.0f};
@@ -58,7 +58,7 @@ char *fragmentFileName = "frag.txt";
 GLuint p,v,f;
  
 // vert attrib locations
-GLuint vertexLoc, colorLoc;
+GLuint vertexLoc, colorLoc,normalLoc;
 GLuint angleLoc;
 GLuint axisLocation, fovLocation, ratioLocation, nearPlaneLocation, farPlaneLocation;
  
@@ -300,15 +300,17 @@ void changeSize(int w, int h) {
  
 void setupBuffers() {
  
-    GLuint buffers[2];
-	GLuint nextBuffers[2];
+    GLuint buffers[3];
+	GLuint nextBuffers[3];
  
     glGenVertexArrays(2, vert);
 
+	//-----------------------------------------------------
     // first triangle
     glBindVertexArray(vert[0]);
     // generate 2 buffers for vert and color
-    glGenBuffers(2, buffers);
+    glGenBuffers(3, buffers);
+
     // bind buffer for vertices and copy data into buffer
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
@@ -321,10 +323,17 @@ void setupBuffers() {
     glEnableVertexAttribArray(colorLoc);
     glVertexAttribPointer(colorLoc, 4, GL_FLOAT, 0, 0, 0);
 
+	//bind buffer for normals and copy data into buffer
+	glBindBuffer(GL_ARRAY_BUFFER,buffers[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(normals1), normals1, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(normalLoc);
+    glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
+
+	//--------------------------------------------------------
 	// second triangle
     glBindVertexArray(vert[1]);
     // generate 2 buffers for vert and color
-	glGenBuffers(2, nextBuffers);
+	glGenBuffers(3, nextBuffers);
     // bind buffer for vertices and copy data into buffer
 	glBindBuffer(GL_ARRAY_BUFFER, nextBuffers[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
@@ -336,6 +345,12 @@ void setupBuffers() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(colors2), colors2, GL_STATIC_DRAW);
     glEnableVertexAttribArray(colorLoc);
     glVertexAttribPointer(colorLoc, 4, GL_FLOAT, 0, 0, 0);
+
+	//bind buffer for normals and copy data into buffer
+	glBindBuffer(GL_ARRAY_BUFFER,nextBuffers[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(normals2), normals2, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(normalLoc);
+    glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
 }
  
 void setUniforms() {
@@ -451,6 +466,7 @@ GLuint initShaders() {
     printProgramInfoLog(p);
     vertexLoc = glGetAttribLocation(p,"position");
     colorLoc = glGetAttribLocation(p, "color"); 
+	normalLoc = glGetAttribLocation(p, "normal");
     projMatrixLoc = glGetUniformLocation(p, "projMatrix");
     viewMatrixLoc = glGetUniformLocation(p, "viewMatrix");
 	angleLoc = glGetUniformLocation(p,"ang_i");
