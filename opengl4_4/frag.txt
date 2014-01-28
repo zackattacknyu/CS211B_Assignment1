@@ -3,6 +3,12 @@ uniform mat4 viewMatrix, projMatrix;
 
 in vec4 Color;
 out vec4 outputF;
+
+//the following source of information proved to be quite useful
+//		http://cs.nyu.edu/~elif/phong.pdf
+
+//will also use this for the lighting
+//		http://www.ics.uci.edu/~gopi/CS211A/classes/illumination.pdf
  
 void main()
 {	

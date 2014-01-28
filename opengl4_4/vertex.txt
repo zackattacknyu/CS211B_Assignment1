@@ -8,6 +8,12 @@ in vec3 normal;
  
 out vec4 Color;
 
+varying vec3 v_Vector;
+uniform vec4 ambMat;
+uniform vec4 diffMat;
+uniform vec4 specularMat;
+uniform float specularPow;
+
 //This is just an example.  Don't do this!  It forces the GPU to recalculate the matrix for each vertex.
 //Better to do it once in the CPU.
 mat4 rotationMatrix(vec4 axis, float angle)
