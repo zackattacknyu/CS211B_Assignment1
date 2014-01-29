@@ -1,6 +1,12 @@
 #version 330
 uniform mat4 viewMatrix, projMatrix;
 
+//interpolated texture values from vertex shader
+in vec2 UV;
+
+//values that stay constant
+uniform sampler2D zrdTextureSampler;
+
 in vec4 Color;
 in vec4 Position;
 in vec3 Normal;
@@ -62,4 +68,5 @@ void main()
 
 	outputF = vec4(outputColor,Color.w);
 
+	//outputF = vec4(texture(zrdTextureSampler,UV).rgb,Color.w);
 }

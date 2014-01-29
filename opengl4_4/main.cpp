@@ -32,6 +32,8 @@ struct vec3
 float triangle1Alpha = 0.5f;
 float triangle2Alpha = 0.5f;
 
+GLuint texturePointer, uvLoc, textureLocation;
+
 // vertices for triangle 1
 float vertices1[] = {   -1.0f, -1.0f, -5.0f,
             1.0f, -1.0f, -5.0f,
@@ -42,6 +44,10 @@ float normals1[] = {   -4.0f/3.0f, -4.0f/3.0f, -4.0f/3.0f,
 float colors1[] = { 1.0f, 0.0f, 0.0f, triangle1Alpha,
             1.0f, 0.0f, 0.0f, triangle1Alpha,
             1.0f, 0.0f, 0.0f, triangle1Alpha};
+float uvVertices1[] = {
+			0.0f, 0.0f,
+			1.0f, 0.0f,
+			0.5f, 1.0f};
 
 //vertices for other triangle
 float vertices2[] = {   -1.0f, -1.0f, -3.0f,
@@ -327,7 +333,7 @@ void changeSize(int w, int h) {
  
 void setupBuffers() {
  
-    GLuint buffers[3];
+    GLuint buffers[4];
 	GLuint nextBuffers[3];
 	GLuint thirdBuffers[3];
 	GLuint fourthBuffers[3];
@@ -357,6 +363,12 @@ void setupBuffers() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(normals1), normals1, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(normalLoc);
     glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
+
+	//bind buffer for textures
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(uvVertices1), uvVertices1, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(uvLoc);
+	glVertexAttribPointer(uvLoc, 2, GL_FLOAT, 0, 0, 0);
 
 	//--------------------------------------------------------
 	// second triangle
@@ -448,6 +460,7 @@ void setUniforms() {
 	glUniform1f(ratioLocation,theRatio);
 	glUniform1f(nearPlaneLocation,1);
 	glUniform1f(farPlaneLocation,30);
+	glUniform1f(textureLocation,texturePointer);
 }
  
 void renderScene(void) {
@@ -559,6 +572,8 @@ GLuint initShaders() {
 	axisLocation = glGetUniformLocation(p,"axis_i");
 	fovLocation = glGetUniformLocation(p,"fov");
 	ratioLocation = glGetUniformLocation(p,"ratio");
+	uvLoc = glGetUniformLocation(p,"vertexUV");
+	textureLocation = glGetUniformLocation(p,"zrdTextureSampler");
  
     return(p);
 }
@@ -624,7 +639,7 @@ int main(int argc, char **argv)
     }
 
 	char* filename = "chessBoard_wood_bmp.bmp";
-	GLuint texturePointer = loadBMP_custom(filename);
+	texturePointer = loadBMP_custom(filename);
 	printf("%d",texturePointer);
 
     glEnable(GL_DEPTH_TEST);
