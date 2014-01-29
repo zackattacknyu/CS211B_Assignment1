@@ -582,27 +582,49 @@ float deltaAngle = 0.0f;
 int xOrigin = -1;
 
 float angle = 0.0f;
-
+int mouseMode = 0;
+int startX, startY;
 //This event will trigger when you have a mouse button pressed down.
 void mouseMove(int x, int y) 
 {
 	// x and y is the mouse position.
+	if(mouseMode == 1){
+
+		//rotation mode
+		myAngle = myAngle + 0.001*(x - startX);
+
+	}else if(mouseMode == 2){
+
+		//translation mode
+
+	}else if(mouseMode == 3){
+
+		//zooming mode
+
+	}
 }
 
 //This event occur when you press a mouse button.
 void mouseButton(int button, int state, int x, int y) 
 {
-	// only start motion if the left button is pressed
-	if (button == GLUT_LEFT_BUTTON) 
-	{
-		// when the button is released
-		if (state == GLUT_UP) 
+
+	if(state == GLUT_UP){
+		mouseMode = 0;
+	}else{
+		// only start motion if the left button is pressed
+		if (button == GLUT_LEFT_BUTTON) 
 		{
-		}
-		else  // state = GLUT_DOWN	
-		{
+			mouseMode = 1;
+			startX = x;
+			startY = y;
+		}else if(button == GLUT_MIDDLE_BUTTON){
+
+		}else if(button == GLUT_RIGHT_BUTTON){
+
 		}
 	}
+
+	
 }
 
 int iterationNumber = 0;
