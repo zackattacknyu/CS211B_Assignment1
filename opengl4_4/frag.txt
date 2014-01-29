@@ -2,6 +2,7 @@
 uniform mat4 viewMatrix, projMatrix;
 
 in vec4 Color;
+in vec4 Position;
 out vec4 outputF;
 
 //the following source of information proved to be quite useful
@@ -17,4 +18,16 @@ void main()
 	//	this will let us implement transparency
 	//outputF = vec4(Color,0.1);
 	outputF = Color;
+
+	vec3 lightColor = vec3(1,1,1);
+	vec3 lightCoordinates = vec3(0,0,-10);
+
+	vec3 lightVector = lightCoordinates - vec3(Position);
+	float lightDistance = length(lightVector);
+
+	//get the attentuation
+	//	A = 1/(a + b*r + c*r^2)
+	float attenuation_a = 0.02;
+	float attenuation_b = 0.01;
+	float attenuation_c = 0.03;
 }
