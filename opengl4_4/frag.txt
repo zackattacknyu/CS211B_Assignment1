@@ -3,6 +3,7 @@ uniform mat4 viewMatrix, projMatrix;
 
 in vec4 Color;
 in vec4 Position;
+in vec3 Normal;
 out vec4 outputF;
 
 //the following source of information proved to be quite useful
@@ -20,7 +21,8 @@ void main()
 	outputF = Color;
 
 	vec3 lightColor = vec3(1,1,1);
-	vec3 lightCoordinates = vec3(0,0,-10);
+	vec3 lightCoordinates = vec3(10,0,-10);
+	vec3 cameraCoordinates = vec3(0,0,-10);
 
 	vec3 lightVector = lightCoordinates - vec3(Position);
 	float lightDistance = length(lightVector);
@@ -30,4 +32,14 @@ void main()
 	float attenuation_a = 0.02;
 	float attenuation_b = 0.01;
 	float attenuation_c = 0.03;
+	float attenuation_denominator = attenuation_a + attenuation_b*lightDistance + attenuation_c*lightDistance*lightDistance;
+	float attenuation = 1/attenuation_denominator;
+
+	//reflection vector is calculated as follows:
+	//		R = L - 2(N.L)N 
+	//	    where R is reflection vector, N is normal vector normalized, and L is light vector normalized
+
+	//gets the specular component
+	vec3 eyeVector = cameraCoordinates - vec3(Position);
+
 }
