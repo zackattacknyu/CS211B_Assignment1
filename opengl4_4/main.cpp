@@ -94,7 +94,10 @@ GLuint p,v,f;
 GLuint vertexLoc, colorLoc,normalLoc;
 GLuint angleLoc;
 GLuint axisLocation, fovLocation, ratioLocation, nearPlaneLocation, farPlaneLocation;
- 
+
+//translation information
+GLfloat xdistance, ydistance, zdistance;
+
 // uniform var locations
 GLuint projMatrixLoc, viewMatrixLoc;
 
@@ -157,6 +160,37 @@ void zrd_glRotatef(float angle, float x, float y, float z){
 
 	rotMatrix = rotationMatrix(x,y,z,angle);
 	multiplyMatrix(resultMatrix,rotMatrix);	
+
+	if(currentMatrix_projection){
+		projectionMatrix_stack.pop();
+		projectionMatrix_stack.push(resultMatrix);
+	}else{
+		modelViewMatrix_stack.pop();
+		modelViewMatrix_stack.push(resultMatrix);
+	}
+
+
+
+}
+
+void zrd_glTranslatef(float x, float y, float z){
+	float* translationMatrix = new float[16];
+	float* resultMatrix = new float[16];
+
+	if(currentMatrix_projection){
+		if(projectionMatrix_stack.size() == 0){
+			zrd_glInit();
+		}
+		resultMatrix = projectionMatrix_stack.top();
+	}else{
+		if(modelViewMatrix_stack.size() == 0){
+			zrd_glInit();
+		}
+		resultMatrix = modelViewMatrix_stack.top();
+	}
+
+	setTransMatrix(translationMatrix,x,y,z);
+	multiplyMatrix(resultMatrix,translationMatrix);	
 
 	if(currentMatrix_projection){
 		projectionMatrix_stack.pop();
@@ -482,6 +516,7 @@ void renderScene(void) {
     //placeCam(10,2,10,0,2,-5);
 	placeCam(0,0,-10,0,0,-5);
 	zrd_glRotatef(myAngle,0.0,1.0,0.0);
+	zrd_glTranslatef(xdistance,ydistance,zdistance);
     glUseProgram(p);
     setUniforms();
  
@@ -591,15 +626,23 @@ void mouseMove(int x, int y)
 	if(mouseMode == 1){
 
 		//rotation mode
-		myAngle = myAngle + 0.001*(x - startX);
+		myAngle = myAngle + (x - startX)/10.0;
+		startX = x;
 
 	}else if(mouseMode == 2){
 
 		//translation mode
+		xdistance = xdistance - (x - startX)/100.0;
+		ydistance = ydistance - (y - startY)/100.0;
+		startX = x;
+		startY = y;
 
 	}else if(mouseMode == 3){
 
 		//zooming mode
+		zdistance = zdistance - (y - startY)/10.0;
+		startX = x;
+		startY = y;
 
 	}
 }
@@ -618,9 +661,13 @@ void mouseButton(int button, int state, int x, int y)
 			startX = x;
 			startY = y;
 		}else if(button == GLUT_MIDDLE_BUTTON){
-
+			mouseMode = 2;
+			startX = x;
+			startY = y;
 		}else if(button == GLUT_RIGHT_BUTTON){
-
+			mouseMode = 3;
+			startX = x;
+			startY = y;
 		}
 	}
 
