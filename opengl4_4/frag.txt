@@ -33,7 +33,7 @@ void main()
 
 	//get the attentuation
 	//	A = 1/(a + b*r + c*r^2)
-	float attenuation_a = 0.0;
+	float attenuation_a = 0.2;
 	float attenuation_b = 0.01;
 	float attenuation_c = 0.09;
 	float attenuation_denominator = attenuation_a + attenuation_b*lightDistance + attenuation_c*lightDistance*lightDistance;
@@ -57,7 +57,8 @@ void main()
 	vec3 specularLight = lightColor*specular*attenuation;
 	vec3 diffuseLight = lightColor*diffuse*attenuation;
 
-	vec3 outputColor = min(Color.xyz* (ambientMaterial + diffuseLight + specularLight), vec3(1.0));
+	//vec3 outputColor = min(Color.xyz* (ambientMaterial + diffuseLight + specularLight), vec3(1.0));
+	vec3 outputColor = Color.xyz* (ambientMaterial + diffuseLight + specularLight);
 
 	outputF = vec4(outputColor,Color.w);
 
