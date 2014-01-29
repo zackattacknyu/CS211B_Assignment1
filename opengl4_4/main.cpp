@@ -115,6 +115,7 @@ float* projMatrix = new float[16];
 float* viewMatrix = new float[16];
 
 float myAngle = 0.0f;
+float myAngle2 = 0.0f;
 
 int frame=0,time,timebase=0;
 char s[50];
@@ -516,6 +517,7 @@ void renderScene(void) {
     //placeCam(10,2,10,0,2,-5);
 	placeCam(0,0,-10,0,0,-5);
 	zrd_glRotatef(myAngle,0.0,1.0,0.0);
+	zrd_glRotatef(myAngle2,1.0,0.0,0.0);
 	zrd_glTranslatef(xdistance,ydistance,zdistance);
     glUseProgram(p);
     setUniforms();
@@ -627,7 +629,9 @@ void mouseMove(int x, int y)
 
 		//rotation mode
 		myAngle = myAngle + (x - startX)/10.0;
+		myAngle2 = myAngle2 + (x - startX)/10.0;
 		startX = x;
+		startY = y;
 
 	}else if(mouseMode == 2){
 
@@ -776,6 +780,8 @@ GLuint loadBMP_custom(char filename[]){
 
     // Give the image to OpenGL
     glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+	// glTexStorage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height);
+	// glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_BGR, GL_UNSIGNED_BYTE, data);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
