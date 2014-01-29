@@ -21,11 +21,13 @@ void main()
 	outputF = Color;
 
 	vec3 lightColor = vec3(1,1,1);
-	vec3 lightCoordinates = vec3(10,0,-10);
+	vec3 lightCoordinates = vec3(2,0,-5);
 	vec3 cameraCoordinates = vec3(0,0,-10);
+	float specularPower = 3;
 
 	vec3 lightVector = lightCoordinates - vec3(Position);
 	float lightDistance = length(lightVector);
+	lightVector = normalize(lightVector);
 
 	//get the attentuation
 	//	A = 1/(a + b*r + c*r^2)
@@ -41,5 +43,15 @@ void main()
 
 	//gets the specular component
 	vec3 eyeVector = cameraCoordinates - vec3(Position);
+	eyeVector = normalize(eyeVector);
+	vec3 normalVector = normalize(Normal);
+	vec3 reflectionVector = lightVector - 2 * dot(normalVector,lightVector) * normalVector;
+	float specularPart = pow(dot(reflectionVector,eyeVector),specularPower);
+	float specular = max(0,specularPart);
+
+	vec3 specularLight = lightColor*specular*attenuation;
+	vec3 outputColor = min(Color.xyz + specularLight, vec3(1.0));
+
+	outputF = vec4(outputColor,Color.w);
 
 }
