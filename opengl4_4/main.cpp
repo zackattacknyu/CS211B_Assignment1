@@ -165,6 +165,26 @@ void zrd_glInit(){
 
 }
 
+void zrd_glPushMatrix(){
+	float* initMatrix = new float[16];
+
+	if(currentMatrix_projection){
+		initMatrix = projectionMatrix_stack.top();
+		projectionMatrix_stack.push(initMatrix);
+	}else{
+		initMatrix = modelViewMatrix_stack.top();
+		modelViewMatrix_stack.push(initMatrix);
+	}
+}
+
+void zrd_glPopMatrix(){
+	if(currentMatrix_projection){
+		projectionMatrix_stack.pop();
+	}else{
+		modelViewMatrix_stack.pop();
+	}
+}
+
 void zrd_glRotatef(float angle, float x, float y, float z){
 	float* rotMatrix = new float[16];
 	float* resultMatrix = new float[16];
@@ -590,6 +610,13 @@ void renderScene(void) {
 	zrd_glRotatef(myAngle,0.0,1.0,0.0);
 	zrd_glRotatef(myAngle2,1.0,0.0,0.0);
 	zrd_glTranslatef(xdistance,ydistance,zdistance);
+
+	//zrd_glPushMatrix();
+
+	//zrd_glTranslatef(2,0,0);
+
+	//zrd_glPopMatrix();
+
     glUseProgram(p);
     setUniforms();
  
