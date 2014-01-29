@@ -81,8 +81,30 @@ float normals4[] = {   -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
 float colors4[] = { 1.0f, 0.0f, 1.0f, triangle2Alpha,
             1.0f, 0.0f, 1.0f, triangle2Alpha,
             1.0f, 0.0f, 1.0f, triangle2Alpha};
+
+//vertices for 5th triangle, one of the triangles for the bottom square 
+float vertices5[] = {   -1.0f, -1.0f, -3.0f,
+            1.0f, -1.0f, -5.0f,
+            -1.0f, -1.0f, -5.0f};
+float normals5[] = {   -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
+            -4.0f/3.0f, -8.0f/3.0f, 4.0f/3.0f,
+            0.0f, 0.0f, 4.0f,};
+float colors5[] = { 1.0f, 1.0f, 0.0f, triangle2Alpha,
+            1.0f, 1.0f, 0.0f, triangle2Alpha,
+            1.0f, 1.0f, 0.0f, triangle2Alpha};
  
- 
+
+//vertices for 6th triangle, one of the triangles for the bottom square 
+float vertices6[] = {   -1.0f, -1.0f, -3.0f,
+            1.0f, -1.0f, -5.0f,
+            1.0f, -1.0f, -3.0f};
+float normals6[] = {   -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
+            -4.0f/3.0f, -8.0f/3.0f, 4.0f/3.0f,
+            0.0f, 0.0f, 4.0f,};
+float colors6[] = { 1.0f, 1.0f, 0.0f, triangle2Alpha,
+            1.0f, 1.0f, 0.0f, triangle2Alpha,
+            1.0f, 1.0f, 0.0f, triangle2Alpha};
+
 // shader names
 char *vertexFileName = "vertex.txt";
 char *fragmentFileName = "frag.txt";
@@ -372,8 +394,10 @@ void setupBuffers() {
 	GLuint nextBuffers[3];
 	GLuint thirdBuffers[3];
 	GLuint fourthBuffers[3];
+	GLuint fifthBuffers[3];
+	GLuint sixthBuffers[3];
  
-    glGenVertexArrays(4, vert);
+    glGenVertexArrays(6, vert);
 
 	//-----------------------------------------------------
     // first triangle
@@ -473,6 +497,53 @@ void setupBuffers() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(normals4), normals4, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(normalLoc);
     glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
+
+	//--------------------------------------------------------
+	// fifth triangle
+    glBindVertexArray(vert[4]);
+    // generate 2 buffers for vert and color
+	glGenBuffers(3, fifthBuffers);
+    // bind buffer for vertices and copy data into buffer
+	glBindBuffer(GL_ARRAY_BUFFER, fifthBuffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices5), vertices5, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(vertexLoc);
+    glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, 0, 0, 0);
+ 
+    // bind buffer for colors and copy data into buffer
+    glBindBuffer(GL_ARRAY_BUFFER, fifthBuffers[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colors5), colors5, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(colorLoc);
+    glVertexAttribPointer(colorLoc, 4, GL_FLOAT, 0, 0, 0);
+
+	//bind buffer for normals and copy data into buffer
+	glBindBuffer(GL_ARRAY_BUFFER,fifthBuffers[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(normals5), normals5, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(normalLoc);
+    glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
+
+	
+	//--------------------------------------------------------
+	// sixth triangle
+    glBindVertexArray(vert[5]);
+    // generate 2 buffers for vert and color
+	glGenBuffers(3, sixthBuffers);
+    // bind buffer for vertices and copy data into buffer
+	glBindBuffer(GL_ARRAY_BUFFER, sixthBuffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices6), vertices6, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(vertexLoc);
+    glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, 0, 0, 0);
+ 
+    // bind buffer for colors and copy data into buffer
+    glBindBuffer(GL_ARRAY_BUFFER, sixthBuffers[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colors6), colors6, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(colorLoc);
+    glVertexAttribPointer(colorLoc, 4, GL_FLOAT, 0, 0, 0);
+
+	//bind buffer for normals and copy data into buffer
+	glBindBuffer(GL_ARRAY_BUFFER,sixthBuffers[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(normals6), normals6, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(normalLoc);
+    glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
 }
  
 void setUniforms() {
@@ -533,7 +604,13 @@ void renderScene(void) {
 
 	glBindVertexArray(vert[3]);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
-  
+	
+	glBindVertexArray(vert[4]);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	glBindVertexArray(vert[5]);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
    glutSwapBuffers();
 }
  
