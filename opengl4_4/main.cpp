@@ -35,8 +35,8 @@ float triangle2Alpha = 0.5f;
 float vertices1[] = {   -1.0f, -1.0f, -5.0f,
             1.0f, -1.0f, -5.0f,
             0.0f, 1.0f, -4.0f};
-float normals1[] = {   0.0f, -2.0f, 4.0f,
-            0.0f, -2.0f, 4.0f,
+float normals1[] = {   -4.0f/3.0f, -4.0f/3.0f, -4.0f/3.0f,
+            -4.0f/3.0f, -8.0f/3.0f, 4.0f/3.0f,
             0.0f, 0.0f, 4.0f,};
 float colors1[] = { 1.0f, 0.0f, 0.0f, triangle1Alpha,
             1.0f, 0.0f, 0.0f, triangle1Alpha,
@@ -46,8 +46,8 @@ float colors1[] = { 1.0f, 0.0f, 0.0f, triangle1Alpha,
 float vertices2[] = {   -1.0f, -1.0f, -3.0f,
             1.0f, -1.0f, -3.0f,
             0.0f, 1.0f, -4.0f};
-float normals2[] = {   0.0f, 2.0f, 4.0f,
-            0.0f, 2.0f, 4.0f,
+float normals2[] = {   -4.0f/3.0f, 0.0f, 4.0f/3.0f,
+            -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
             0.0f, 0.0f, 4.0f,};
 float colors2[] = { 0.0f, 1.0f, 0.0f, triangle2Alpha,
             0.0f, 1.0f, 0.0f, triangle2Alpha,
@@ -57,8 +57,8 @@ float colors2[] = { 0.0f, 1.0f, 0.0f, triangle2Alpha,
 float vertices3[] = {   -1.0f, -1.0f, -3.0f,
             -1.0f, -1.0f, -5.0f,
             0.0f, 1.0f, -4.0f};
-float normals3[] = {   0.0f, 2.0f, 4.0f,
-            0.0f, 2.0f, 4.0f,
+float normals3[] = {   -4.0f/3.0f, 0.0f, 4.0f/3.0f,
+            -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
             0.0f, 0.0f, 4.0f,};
 float colors3[] = { 0.0f, 0.0f, 1.0f, triangle2Alpha,
             0.0f, 0.0f, 1.0f, triangle2Alpha,
@@ -68,8 +68,8 @@ float colors3[] = { 0.0f, 0.0f, 1.0f, triangle2Alpha,
 float vertices4[] = {   1.0f, -1.0f, -3.0f,
             1.0f, -1.0f, -5.0f,
             0.0f, 1.0f, -4.0f};
-float normals4[] = {   0.0f, 2.0f, 4.0f,
-            0.0f, 2.0f, 4.0f,
+float normals4[] = {   -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
+            -4.0f/3.0f, -8.0f/3.0f, 4.0f/3.0f,
             0.0f, 0.0f, 4.0f,};
 float colors4[] = { 1.0f, 0.0f, 1.0f, triangle2Alpha,
             1.0f, 0.0f, 1.0f, triangle2Alpha,
@@ -462,8 +462,8 @@ void renderScene(void) {
     glutSetWindowTitle(s);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA,GL_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA,GL_SRC_ALPHA);
 
     //placeCam(10,2,10,0,2,-5);
 	placeCam(0,0,-10,0,0,-5);
