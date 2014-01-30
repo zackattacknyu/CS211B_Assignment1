@@ -246,6 +246,29 @@ void zrd_glTranslatef(float x, float y, float z){
 
 
 }
+
+void zrd_glScalef(float x, float y, float z){
+	float* resultMatrix = new float[16];
+	float* scaleMatrix = new float[16];
+
+	for(int index = 0; index < 16; index++){
+		scaleMatrix[index] = 0.0f;
+	}
+	scaleMatrix[0] = x;
+	scaleMatrix[5] = y;
+	scaleMatrix[10] = z;
+	scaleMatrix[15] = 1;
+
+	if(modelViewMatrix_stack.size() == 0){
+		zrd_glInit();
+	}
+	resultMatrix = modelViewMatrix_stack.top();
+
+	multiplyMatrix(resultMatrix,scaleMatrix);
+
+	modelViewMatrix_stack.pop();
+	modelViewMatrix_stack.push(resultMatrix);
+}
  
 // normalize a vec3
 void normalize(float *a) 
@@ -610,6 +633,7 @@ void renderScene(void) {
 	zrd_glRotatef(myAngle,0.0,1.0,0.0);
 	zrd_glRotatef(myAngle2,1.0,0.0,0.0);
 	zrd_glTranslatef(xdistance,ydistance,zdistance);
+	//zrd_glScalef(0.5f,0.5f,0.5f);
 
 	//zrd_glPushMatrix();
 
