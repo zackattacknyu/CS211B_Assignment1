@@ -36,9 +36,9 @@ float triangle2Alpha = 0.5f;
 GLuint texturePointer, uvLoc, textureLocation;
 
 // vertices for triangle 1
-float vertices1[] = {   -1.0f, -1.0f, -5.0f,
-            1.0f, -1.0f, -5.0f,
-            0.0f, 1.0f, -4.0f};
+float vertices1[] = {   -1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            0.0f, 1.0f, 0.0f};
 float normals1[] = {   -4.0f/3.0f, -4.0f/3.0f, -4.0f/3.0f,
             -4.0f/3.0f, -8.0f/3.0f, 4.0f/3.0f,
             0.0f, 0.0f, 4.0f,};
@@ -51,9 +51,9 @@ float uvVertices1[] = {
 			0.5f, 1.0f};
 
 //vertices for other triangle
-float vertices2[] = {   -1.0f, -1.0f, -3.0f,
-            1.0f, -1.0f, -3.0f,
-            0.0f, 1.0f, -4.0f};
+float vertices2[] = {   -1.0f, -1.0f, 1.0f,
+            1.0f, -1.0f, 1.0f,
+            0.0f, 1.0f, 0.0f};
 float normals2[] = {   -4.0f/3.0f, 0.0f, 4.0f/3.0f,
             -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
             0.0f, 0.0f, 4.0f,};
@@ -62,9 +62,9 @@ float colors2[] = { 0.0f, 1.0f, 0.0f, triangle2Alpha,
             0.0f, 1.0f, 0.0f, triangle2Alpha};
 
 //vertices for 3rd triangle 
-float vertices3[] = {   -1.0f, -1.0f, -3.0f,
-            -1.0f, -1.0f, -5.0f,
-            0.0f, 1.0f, -4.0f};
+float vertices3[] = {   -1.0f, -1.0f, 1.0f,
+            -1.0f, -1.0f, -1.0f,
+            0.0f, 1.0f, 0.0f};
 float normals3[] = {   -4.0f/3.0f, 0.0f, 4.0f/3.0f,
             -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
             0.0f, 0.0f, 4.0f,};
@@ -73,9 +73,9 @@ float colors3[] = { 0.0f, 0.0f, 1.0f, triangle2Alpha,
             0.0f, 0.0f, 1.0f, triangle2Alpha};
 
 //vertices for 4th triangle 
-float vertices4[] = {   1.0f, -1.0f, -3.0f,
-            1.0f, -1.0f, -5.0f,
-            0.0f, 1.0f, -4.0f};
+float vertices4[] = {   1.0f, -1.0f, 1.0f,
+            1.0f, -1.0f, -1.0f,
+            0.0f, 1.0f, 0.0f};
 float normals4[] = {   -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
             -4.0f/3.0f, -8.0f/3.0f, 4.0f/3.0f,
             0.0f, 0.0f, 4.0f,};
@@ -84,9 +84,9 @@ float colors4[] = { 1.0f, 0.0f, 1.0f, triangle2Alpha,
             1.0f, 0.0f, 1.0f, triangle2Alpha};
 
 //vertices for 5th triangle, one of the triangles for the bottom square 
-float vertices5[] = {   -1.0f, -1.0f, -3.0f,
-            1.0f, -1.0f, -5.0f,
-            -1.0f, -1.0f, -5.0f};
+float vertices5[] = {   -1.0f, -1.0f, 1.0f,
+            1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f, -1.0f};
 float normals5[] = {   -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
             -4.0f/3.0f, -8.0f/3.0f, 4.0f/3.0f,
             0.0f, 0.0f, 4.0f,};
@@ -96,9 +96,9 @@ float colors5[] = { 1.0f, 1.0f, 0.0f, triangle2Alpha,
  
 
 //vertices for 6th triangle, one of the triangles for the bottom square 
-float vertices6[] = {   -1.0f, -1.0f, -3.0f,
-            1.0f, -1.0f, -5.0f,
-            1.0f, -1.0f, -3.0f};
+float vertices6[] = {   -1.0f, -1.0f, 1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, 1.0f};
 float normals6[] = {   -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
             -4.0f/3.0f, -8.0f/3.0f, 4.0f/3.0f,
             0.0f, 0.0f, 4.0f,};
@@ -640,6 +640,9 @@ void renderScene(void) {
  
 	drawTriangles();
 
+	//zrd_glTranslatef(0,0,4);
+	
+	//drawTriangles();
    glutSwapBuffers();
 }
 
