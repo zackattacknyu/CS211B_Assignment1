@@ -818,7 +818,7 @@ void mouseMove(int x, int y)
 	if(mouseMode == 1){
 
 		//rotation mode
-		myAngle = myAngle + (x - startX)/10.0;
+		myAngle = myAngle - (x - startX)/10.0;
 		myAngle2 = myAngle2 + (y - startY)/10.0;
 		startX = x;
 		startY = y;
