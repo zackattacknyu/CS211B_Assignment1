@@ -633,7 +633,7 @@ void renderScene(void) {
 	placeCam(0,0,-10,0,0,-5);
 	zrd_glRotatef(myAngle,0.0,1.0,0.0);
 	zrd_glRotatef(myAngle2,1.0,0.0,0.0);
-	zrd_glTranslatef(xdistance,ydistance,zdistance);
+	zrd_glTranslatef(-xdistance,ydistance,-zdistance);
 
     glUseProgram(p);
     setUniforms();
