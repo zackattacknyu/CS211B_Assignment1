@@ -60,6 +60,10 @@ float normals2[] = {   -4.0f/3.0f, 0.0f, 4.0f/3.0f,
 float colors2[] = { 0.0f, 1.0f, 0.0f, triangle2Alpha,
             0.0f, 1.0f, 0.0f, triangle2Alpha,
             0.0f, 1.0f, 0.0f, triangle2Alpha};
+float uvVertices2[] = {
+			0.0f, 0.0f,
+			1.0f, 0.0f,
+			0.5f, 1.0f};
 
 //vertices for 3rd triangle 
 float vertices3[] = {   -1.0f, -1.0f, 1.0f,
@@ -71,6 +75,10 @@ float normals3[] = {   -4.0f/3.0f, 0.0f, 4.0f/3.0f,
 float colors3[] = { 0.0f, 0.0f, 1.0f, triangle2Alpha,
             0.0f, 0.0f, 1.0f, triangle2Alpha,
             0.0f, 0.0f, 1.0f, triangle2Alpha};
+float uvVertices3[] = {
+			0.0f, 0.0f,
+			1.0f, 0.0f,
+			0.5f, 1.0f};
 
 //vertices for 4th triangle 
 float vertices4[] = {   1.0f, -1.0f, 1.0f,
@@ -82,6 +90,10 @@ float normals4[] = {   -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
 float colors4[] = { 1.0f, 0.0f, 1.0f, triangle2Alpha,
             1.0f, 0.0f, 1.0f, triangle2Alpha,
             1.0f, 0.0f, 1.0f, triangle2Alpha};
+float uvVertices4[] = {
+			0.0f, 0.0f,
+			1.0f, 0.0f,
+			0.5f, 1.0f};
 
 //vertices for 5th triangle, one of the triangles for the bottom square 
 float vertices5[] = {   -1.0f, -1.0f, 1.0f,
@@ -93,7 +105,10 @@ float normals5[] = {   -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
 float colors5[] = { 1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha};
- 
+float uvVertices5[] = {
+			0.0f, 0.0f,
+			1.0f, 0.0f,
+			0.5f, 1.0f}; 
 
 //vertices for 6th triangle, one of the triangles for the bottom square 
 float vertices6[] = {   -1.0f, -1.0f, 1.0f,
@@ -105,6 +120,10 @@ float normals6[] = {   -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
 float colors6[] = { 1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha};
+float uvVertices6[] = {
+			0.0f, 0.0f,
+			1.0f, 0.0f,
+			0.5f, 1.0f};
 
 // shader names
 char *vertexFileName = "vertex.txt";
@@ -435,11 +454,11 @@ void changeSize(int w, int h) {
 void setupBuffers() {
  
     GLuint buffers[4];
-	GLuint nextBuffers[3];
-	GLuint thirdBuffers[3];
-	GLuint fourthBuffers[3];
-	GLuint fifthBuffers[3];
-	GLuint sixthBuffers[3];
+	GLuint nextBuffers[4];
+	GLuint thirdBuffers[4];
+	GLuint fourthBuffers[4];
+	GLuint fifthBuffers[4];
+	GLuint sixthBuffers[4];
  
     glGenVertexArrays(6, vert);
 
@@ -477,7 +496,7 @@ void setupBuffers() {
 	// second triangle
     glBindVertexArray(vert[1]);
     // generate 2 buffers for vert and color
-	glGenBuffers(3, nextBuffers);
+	glGenBuffers(4, nextBuffers);
     // bind buffer for vertices and copy data into buffer
 	glBindBuffer(GL_ARRAY_BUFFER, nextBuffers[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
@@ -496,11 +515,17 @@ void setupBuffers() {
 	glEnableVertexAttribArray(normalLoc);
     glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
 
+	//bind buffer for textures
+    glBindBuffer(GL_ARRAY_BUFFER, nextBuffers[3]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(uvVertices2), uvVertices2, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(uvLoc);
+	glVertexAttribPointer(uvLoc, 2, GL_FLOAT, 0, 0, 0);
+
 	//--------------------------------------------------------
 	// third triangle
     glBindVertexArray(vert[2]);
     // generate 2 buffers for vert and color
-	glGenBuffers(3, thirdBuffers);
+	glGenBuffers(4, thirdBuffers);
     // bind buffer for vertices and copy data into buffer
 	glBindBuffer(GL_ARRAY_BUFFER, thirdBuffers[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices3), vertices3, GL_STATIC_DRAW);
@@ -519,11 +544,17 @@ void setupBuffers() {
 	glEnableVertexAttribArray(normalLoc);
     glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
 
+	//bind buffer for textures
+    glBindBuffer(GL_ARRAY_BUFFER, thirdBuffers[3]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(uvVertices3), uvVertices3, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(uvLoc);
+	glVertexAttribPointer(uvLoc, 2, GL_FLOAT, 0, 0, 0);
+
 	//--------------------------------------------------------
 	// fourth triangle
     glBindVertexArray(vert[3]);
     // generate 2 buffers for vert and color
-	glGenBuffers(3, fourthBuffers);
+	glGenBuffers(4, fourthBuffers);
     // bind buffer for vertices and copy data into buffer
 	glBindBuffer(GL_ARRAY_BUFFER, fourthBuffers[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices4), vertices4, GL_STATIC_DRAW);
@@ -542,11 +573,17 @@ void setupBuffers() {
 	glEnableVertexAttribArray(normalLoc);
     glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
 
+	//bind buffer for textures
+    glBindBuffer(GL_ARRAY_BUFFER, fourthBuffers[3]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(uvVertices4), uvVertices4, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(uvLoc);
+	glVertexAttribPointer(uvLoc, 2, GL_FLOAT, 0, 0, 0);
+
 	//--------------------------------------------------------
 	// fifth triangle
     glBindVertexArray(vert[4]);
     // generate 2 buffers for vert and color
-	glGenBuffers(3, fifthBuffers);
+	glGenBuffers(4, fifthBuffers);
     // bind buffer for vertices and copy data into buffer
 	glBindBuffer(GL_ARRAY_BUFFER, fifthBuffers[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices5), vertices5, GL_STATIC_DRAW);
@@ -565,12 +602,16 @@ void setupBuffers() {
 	glEnableVertexAttribArray(normalLoc);
     glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
 
-	
+	//bind buffer for textures
+    glBindBuffer(GL_ARRAY_BUFFER, fifthBuffers[3]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(uvVertices5), uvVertices5, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(uvLoc);
+	glVertexAttribPointer(uvLoc, 2, GL_FLOAT, 0, 0, 0);
 	//--------------------------------------------------------
 	// sixth triangle
     glBindVertexArray(vert[5]);
     // generate 2 buffers for vert and color
-	glGenBuffers(3, sixthBuffers);
+	glGenBuffers(4, sixthBuffers);
     // bind buffer for vertices and copy data into buffer
 	glBindBuffer(GL_ARRAY_BUFFER, sixthBuffers[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices6), vertices6, GL_STATIC_DRAW);
@@ -588,6 +629,12 @@ void setupBuffers() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(normals6), normals6, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(normalLoc);
     glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
+
+	//bind buffer for textures
+    glBindBuffer(GL_ARRAY_BUFFER, sixthBuffers[3]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(uvVertices6), uvVertices6, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(uvLoc);
+	glVertexAttribPointer(uvLoc, 2, GL_FLOAT, 0, 0, 0);
 }
  
 void setUniforms() {
