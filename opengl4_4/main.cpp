@@ -447,7 +447,7 @@ void setupBuffers() {
     // first triangle
     glBindVertexArray(vert[0]);
     // generate 2 buffers for vert and color
-    glGenBuffers(3, buffers);
+    glGenBuffers(4, buffers);
 
     // bind buffer for vertices and copy data into buffer
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
@@ -610,7 +610,8 @@ void setUniforms() {
 	glUniform1f(ratioLocation,theRatio);
 	glUniform1f(nearPlaneLocation,1);
 	glUniform1f(farPlaneLocation,30);
-	glUniform1f(textureLocation,texturePointer);
+
+	glUniform1i(textureLocation,0);
 }
  
 void renderScene(void) {
@@ -731,6 +732,8 @@ GLuint initShaders() {
     vertexLoc = glGetAttribLocation(p,"position");
     colorLoc = glGetAttribLocation(p, "color"); 
 	normalLoc = glGetAttribLocation(p, "normal");
+	uvLoc = glGetAttribLocation(p,"vertexUV");
+
     projMatrixLoc = glGetUniformLocation(p, "projMatrix");
     viewMatrixLoc = glGetUniformLocation(p, "viewMatrix");
 	angleLoc = glGetUniformLocation(p,"ang_i");
@@ -739,7 +742,6 @@ GLuint initShaders() {
 	axisLocation = glGetUniformLocation(p,"axis_i");
 	fovLocation = glGetUniformLocation(p,"fov");
 	ratioLocation = glGetUniformLocation(p,"ratio");
-	uvLoc = glGetUniformLocation(p,"vertexUV");
 	textureLocation = glGetUniformLocation(p,"zrdTextureSampler");
  
     return(p);
@@ -909,6 +911,7 @@ GLuint loadBMP_custom(char filename[]){
     glBindTexture(GL_TEXTURE_2D, textureID);
 
     // Give the image to OpenGL
+	// image data is going into the "data" variable, that has been verified
     glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
 	// glTexStorage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height);
 	// glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_BGR, GL_UNSIGNED_BYTE, data);

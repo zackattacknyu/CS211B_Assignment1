@@ -69,7 +69,8 @@ void main()
 	//vec3 outputColor = Color.xyz* (diffuseLight);
 	//vec3 outputColor = Color.xyz* (specularLight);
 
-	outputF = vec4(outputColor,Color.w);
+	//outputF = vec4(outputColor,Color.w);
 
-	//outputF = vec4(texture(zrdTextureSampler,UV).rgb,Color.w);
+	outputF = vec4(texture(zrdTextureSampler,UV).rgb,Color.w);
+	//outputF = vec4(UV,1.0,1.0);
 }
