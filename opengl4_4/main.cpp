@@ -106,9 +106,9 @@ float colors5[] = { 1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha};
 float uvVertices5[] = {
-			0.0f, 0.0f,
 			1.0f, 0.0f,
-			0.5f, 1.0f}; 
+			0.0f, 1.0f,
+			0.0f, 0.0f}; 
 
 //vertices for 6th triangle, one of the triangles for the bottom square 
 float vertices6[] = {   -1.0f, -1.0f, 1.0f,
@@ -122,8 +122,8 @@ float colors6[] = { 1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha};
 float uvVertices6[] = {
 			0.0f, 0.0f,
-			1.0f, 0.0f,
-			0.5f, 1.0f};
+			1.0f, 1.0f,
+			1.0f, 0.0f};
 
 // shader names
 char *vertexFileName = "vertex.txt";
@@ -859,7 +859,7 @@ void mouseButton(int button, int state, int x, int y)
 
 int iterationNumber = 0;
 void rotateIdle(){
-	myAngle += 0.0005;
+	//myAngle += 0.0005;
 	glutPostRedisplay();
 }
  
