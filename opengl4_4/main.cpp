@@ -114,8 +114,8 @@ float colors5[] = { 1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha};
 float uvVertices5[] = {
-			1.0f, 0.0f,
 			0.0f, 1.0f,
+			1.0f, 0.0f,
 			0.0f, 0.0f}; 
 
 //vertices for 6th triangle, one of the triangles for the bottom square 
@@ -129,9 +129,9 @@ float colors6[] = { 1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha};
 float uvVertices6[] = {
-			0.0f, 0.0f,
-			1.0f, 1.0f,
-			1.0f, 0.0f};
+			0.0f, 1.0f,
+			1.0f, 0.0f,
+			1.0f, 1.0f};
 
 // shader names
 char *vertexFileName = "vertex.txt";
