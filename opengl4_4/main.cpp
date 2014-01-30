@@ -29,6 +29,9 @@ struct vec3
 	float z;
 };
 
+//lighting Coordinates
+float lightCoords[] = {-1.0f,0.0f,1.0f,1.0f};
+
 //transparency values
 float triangle1Alpha = 0.5f;
 float triangle2Alpha = 0.5f;
@@ -136,6 +139,7 @@ GLuint p,v,f;
 GLuint vertexLoc, colorLoc,normalLoc;
 GLuint angleLoc;
 GLuint axisLocation, fovLocation, ratioLocation, nearPlaneLocation, farPlaneLocation;
+GLuint lightLocation;
 
 //translation information
 GLfloat xdistance, ydistance, zdistance;
@@ -413,6 +417,7 @@ float * rotationMatrix(float x, float y, float z, float angle)
 }
  
 // Projection Matrix
+//gluPerspective
 void buildProjMatrix(float fov, float ratio, float nearP, float farP) {
  
     float f = 1.0f / tan (fov * (PI / 360.0));
@@ -658,6 +663,7 @@ void setUniforms() {
 	glUniform1f(nearPlaneLocation,1);
 	glUniform1f(farPlaneLocation,30);
 
+	glUniform3f(lightLocation,lightCoords[0],lightCoords[1],lightCoords[2]);
 	glUniform1i(textureLocation,0);
 }
  
@@ -679,9 +685,13 @@ void renderScene(void) {
 
     //placeCam(10,2,10,0,2,-5);
 	placeCam(0,0,-10,0,0,-5);
-	zrd_glRotatef(myAngle,0.0,1.0,0.0);
-	zrd_glRotatef(myAngle2,1.0,0.0,0.0);
 	zrd_glTranslatef(-xdistance,ydistance,-zdistance);
+	zrd_glRotatef(myAngle2,1.0,0.0,0.0);
+	zrd_glRotatef(myAngle,0.0,1.0,0.0);
+	
+	
+	
+	
 
     glUseProgram(p);
     setUniforms();
@@ -790,6 +800,7 @@ GLuint initShaders() {
 	fovLocation = glGetUniformLocation(p,"fov");
 	ratioLocation = glGetUniformLocation(p,"ratio");
 	textureLocation = glGetUniformLocation(p,"zrdTextureSampler");
+	lightLocation = glGetUniformLocation(p,"lightCoordinates");
  
     return(p);
 }
@@ -808,7 +819,7 @@ void mouseMove(int x, int y)
 
 		//rotation mode
 		myAngle = myAngle + (x - startX)/10.0;
-		myAngle2 = myAngle2 + (x - startX)/10.0;
+		myAngle2 = myAngle2 + (y - startY)/10.0;
 		startX = x;
 		startY = y;
 

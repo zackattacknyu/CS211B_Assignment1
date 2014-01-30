@@ -6,6 +6,8 @@ in vec4 position;
 in vec4 color;
 in vec3 normal;
 
+uniform vec3 lightCoordinates;
+
 // Texture stuff
 //layout(location = 1) in vec2 vertexUV;
 in vec2 vertexUV;
@@ -52,15 +54,17 @@ void main()
 	vec3 pos = vec3(0.0,0.0,0.0);
     Color = color;
 	Position = position;
-	Normal = normal;
 	// Matrix multiplication is not commutative, i.e. the order of operations matters. 
 	// The transformations on a vertex' position, in order are:
 	// model
 	// view
 	// projection
 
-
-    gl_Position = projMatrix * viewMatrix * position ;
+	//mat4 normalMatrix = transpose(inverse(viewMatrix));
+	//vec4 tempVector = normalMatrix * vec4(normal.x, normal.y, normal.z,0);
+	//Normal = vec3(tempVector[0],tempVector[1],tempVector[2]);
+    Normal = normal;
+	gl_Position = projMatrix * viewMatrix * position ;
 
 	UV = vertexUV;
 }
