@@ -39,6 +39,7 @@ float lightW = 1.0f;
 float triangle1Alpha = 0.5f;
 float triangle2Alpha = 0.5f;
 bool transparent = false; 
+bool animated = false;
 
 GLuint texturePointer, uvLoc, textureLocation;
 
@@ -693,7 +694,7 @@ void renderScene(void) {
 
     //placeCam(10,2,10,0,2,-5);
 	placeCam(0,0,-10,0,0,-5);
-	zrd_glTranslatef(-xdistance,ydistance,-zdistance);
+	zrd_glTranslatef(xdistance,ydistance,-zdistance);
 	zrd_glRotatef(myAngle2,1.0,0.0,0.0);
 	zrd_glRotatef(myAngle,0.0,1.0,0.0);
 	
@@ -837,6 +838,9 @@ void readKeyboard( unsigned char key, int x, int y ){
 	  case 'f':
 		  lightZ = lightZ + 0.1;
 		  break;
+	  case 'g':
+		  animated = !animated;
+		  break;
 	  glutPostRedisplay( );
 	}
 }
@@ -903,7 +907,9 @@ void mouseButton(int button, int state, int x, int y)
 
 int iterationNumber = 0;
 void rotateIdle(){
-	//myAngle += 0.0005;
+	if(animated){
+		myAngle += 0.0005;
+	}
 	glutPostRedisplay();
 }
  
