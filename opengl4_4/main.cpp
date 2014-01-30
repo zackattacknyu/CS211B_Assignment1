@@ -35,6 +35,7 @@ float lightCoords[] = {-1.0f,0.0f,1.0f,1.0f};
 //transparency values
 float triangle1Alpha = 0.5f;
 float triangle2Alpha = 0.5f;
+bool transparent = false; 
 
 GLuint texturePointer, uvLoc, textureLocation;
 
@@ -680,8 +681,12 @@ void renderScene(void) {
     glutSetWindowTitle(s);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA,GL_SRC_ALPHA);
+	if(transparent){
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA,GL_SRC_ALPHA);
+	}else{
+		glDisable(GL_BLEND);
+	}
 
     //placeCam(10,2,10,0,2,-5);
 	placeCam(0,0,-10,0,0,-5);
@@ -689,10 +694,6 @@ void renderScene(void) {
 	zrd_glRotatef(myAngle2,1.0,0.0,0.0);
 	zrd_glRotatef(myAngle,0.0,1.0,0.0);
 	
-	
-	
-	
-
     glUseProgram(p);
     setUniforms();
  
@@ -808,6 +809,17 @@ GLuint initShaders() {
 float deltaAngle = 0.0f;
 int xOrigin = -1;
 
+
+void readKeyboard( unsigned char key, int x, int y ){
+  switch( key ){
+	  case  0x1B: /* esc */
+	  case  't':
+		  transparent = !transparent;
+		break;
+	  glutPostRedisplay( );
+	}
+}
+
 float angle = 0.0f;
 int mouseMode = 0;
 int startX, startY;
@@ -888,6 +900,7 @@ int main(int argc, char **argv)
     glutIdleFunc(rotateIdle);
     glutReshapeFunc(changeSize);
 
+	glutKeyboardFunc(readKeyboard);
 	glutMouseFunc(mouseButton);
 	glutMotionFunc(mouseMove);
  
