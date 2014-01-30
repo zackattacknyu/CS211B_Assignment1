@@ -11,6 +11,7 @@ using namespace std;
  
 #define PI       3.14159265358979323846
 
+void drawTriangles();
 void setTransMatrix(float *mat, float x, float y, float z);
 void multiplyMatrix(float *a, float *b);
 void xProduct( float *a, float *b, float *res);
@@ -633,18 +634,18 @@ void renderScene(void) {
 	zrd_glRotatef(myAngle,0.0,1.0,0.0);
 	zrd_glRotatef(myAngle2,1.0,0.0,0.0);
 	zrd_glTranslatef(xdistance,ydistance,zdistance);
-	//zrd_glScalef(0.5f,0.5f,0.5f);
-
-	//zrd_glPushMatrix();
-
-	//zrd_glTranslatef(2,0,0);
-
-	//zrd_glPopMatrix();
 
     glUseProgram(p);
     setUniforms();
  
-    glBindVertexArray(vert[0]);
+	drawTriangles();
+
+   glutSwapBuffers();
+}
+
+void drawTriangles(){
+
+	glBindVertexArray(vert[0]);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	glBindVertexArray(vert[1]);
@@ -661,8 +662,6 @@ void renderScene(void) {
 
 	glBindVertexArray(vert[5]);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
-
-   glutSwapBuffers();
 }
  
 
