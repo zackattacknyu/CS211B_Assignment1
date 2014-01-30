@@ -859,7 +859,7 @@ void mouseButton(int button, int state, int x, int y)
 
 int iterationNumber = 0;
 void rotateIdle(){
-	//myAngle += 0.0005;
+	myAngle += 0.0005;
 	glutPostRedisplay();
 }
  
@@ -895,7 +895,7 @@ int main(int argc, char **argv)
 	printf("%d",texturePointer);
 
     glEnable(GL_DEPTH_TEST);
-    glClearColor(1.0,1.0,1.0,1.0);
+    glClearColor(0.5,0.5,0.5,1.0);
     p = initShaders(); 
     setupBuffers(); 
     glutMainLoop();
