@@ -30,7 +30,10 @@ struct vec3
 };
 
 //lighting Coordinates
-float lightCoords[] = {-1.0f,0.0f,1.0f,1.0f};
+float lightX = -1.0f;
+float lightY = 0.0f;
+float lightZ = 1.0f;
+float lightW = 1.0f;
 
 //transparency values
 float triangle1Alpha = 0.5f;
@@ -664,7 +667,7 @@ void setUniforms() {
 	glUniform1f(nearPlaneLocation,1);
 	glUniform1f(farPlaneLocation,30);
 
-	glUniform3f(lightLocation,lightCoords[0],lightCoords[1],lightCoords[2]);
+	glUniform3f(lightLocation,lightX,lightY,lightZ);
 	glUniform1i(textureLocation,0);
 }
  
@@ -816,6 +819,24 @@ void readKeyboard( unsigned char key, int x, int y ){
 	  case  't':
 		  transparent = !transparent;
 		break;
+	  case 'w':
+		  lightY = lightY + 0.1;
+		  break;
+	  case 's':
+		  lightY = lightY - 0.1;
+		  break;
+	  case 'a':
+		  lightX = lightX - 0.1;
+		  break;
+	  case 'd':
+		  lightX = lightX + 0.1;
+		  break;
+	  case 'r':
+		  lightZ = lightZ - 0.1;
+		  break;
+	  case 'f':
+		  lightZ = lightZ + 0.1;
+		  break;
 	  glutPostRedisplay( );
 	}
 }
@@ -882,7 +903,7 @@ void mouseButton(int button, int state, int x, int y)
 
 int iterationNumber = 0;
 void rotateIdle(){
-	myAngle += 0.0005;
+	//myAngle += 0.0005;
 	glutPostRedisplay();
 }
  
