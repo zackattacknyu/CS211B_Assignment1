@@ -35,6 +35,11 @@ float lightY = 0.0f;
 float lightZ = 1.0f;
 float lightW = 1.0f;
 
+//scaling coordinates
+float scaleX = 1.0f;
+float scaleY = 1.0f;
+float scaleZ = 1.0f;
+
 //transparency values
 float triangle1Alpha = 0.5f;
 float triangle2Alpha = 0.5f;
@@ -695,6 +700,7 @@ void renderScene(void) {
     //placeCam(10,2,10,0,2,-5);
 	placeCam(0,0,-10,0,0,-5);
 	zrd_glTranslatef(xdistance,ydistance,-zdistance);
+	zrd_glScalef(scaleX,scaleY,scaleZ);
 	zrd_glRotatef(myAngle2,1.0,0.0,0.0);
 	zrd_glRotatef(myAngle,0.0,1.0,0.0);
 	
@@ -820,6 +826,16 @@ void readKeyboard( unsigned char key, int x, int y ){
 	  case  't':
 		  transparent = !transparent;
 		break;
+	  case 'q':
+		  scaleX = scaleX + 0.05;
+		  scaleY = scaleY + 0.05;
+		  scaleZ = scaleZ + 0.05;
+		  break;
+	  case 'z':
+		  scaleX = scaleX - 0.05;
+		  scaleY = scaleY - 0.05;
+		  scaleZ = scaleZ - 0.05;
+		  break;
 	  case 'w':
 		  lightY = lightY + 0.1;
 		  break;
