@@ -2,6 +2,7 @@
  
 uniform mat4 viewMatrix, projMatrix;
 uniform sampler2D zrdTextureSampler;
+uniform vec2 mouseCoordinates;
 in vec4 position;
 in vec4 color;
 in vec3 normal;

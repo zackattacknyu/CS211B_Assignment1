@@ -46,6 +46,10 @@ float triangle2Alpha = 0.5f;
 bool transparent = false; 
 bool animated = false;
 
+float angle = 0.0f;
+int mouseMode = 0;
+int startX, startY;
+
 GLuint texturePointer, uvLoc, textureLocation;
 
 // vertices for triangle 1
@@ -156,6 +160,7 @@ GLfloat xdistance, ydistance, zdistance;
 
 // uniform var locations
 GLuint projMatrixLoc, viewMatrixLoc;
+GLuint mouseCoordLocation;
 
 //matrix stack
 static bool currentMatrix_modelView = true;
@@ -674,6 +679,7 @@ void setUniforms() {
 	glUniform1f(farPlaneLocation,30);
 
 	glUniform3f(lightLocation,lightX,lightY,lightZ);
+	glUniform2f(mouseCoordLocation,startX,startY);
 	glUniform1i(textureLocation,0);
 }
  
@@ -812,7 +818,7 @@ GLuint initShaders() {
 	ratioLocation = glGetUniformLocation(p,"ratio");
 	textureLocation = glGetUniformLocation(p,"zrdTextureSampler");
 	lightLocation = glGetUniformLocation(p,"lightCoordinates");
- 
+	mouseCoordLocation = glGetUniformLocation(p,"mouseCoordinates");
     return(p);
 }
 
@@ -861,9 +867,7 @@ void readKeyboard( unsigned char key, int x, int y ){
 	}
 }
 
-float angle = 0.0f;
-int mouseMode = 0;
-int startX, startY;
+
 //This event will trigger when you have a mouse button pressed down.
 void mouseMove(int x, int y) 
 {
