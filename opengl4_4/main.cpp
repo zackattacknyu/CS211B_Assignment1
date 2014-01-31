@@ -884,21 +884,27 @@ void readKeyboard( unsigned char key, int x, int y ){
 		  //camera movements
 	  case 'i':
 		  cameraZ = cameraZ - 0.1;
+		  lookAtZ = lookAtZ - 0.1;
 		  break;
 	  case 'k':
 		  cameraZ = cameraZ + 0.1;
+		  lookAtZ = lookAtZ + 0.1;
 		  break;
 	  case 'j':
 		  cameraX = cameraX + 0.1;
+		  lookAtX = lookAtX + 0.1;
 		  break;
 	  case 'l':
 		  cameraX = cameraX - 0.1;
+		  lookAtX = lookAtX - 0.1;
 		  break;
 	  case 'y':
 		  cameraY = cameraY + 0.1;
+		  lookAtY = lookAtY + 0.1;
 		  break;
 	  case 'h':
 		  cameraY = cameraY - 0.1;
+		  lookAtY = lookAtY - 0.1;
 		  break;
 
 		  //look at movements
