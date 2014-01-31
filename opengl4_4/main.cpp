@@ -40,6 +40,18 @@ float scaleX = 1.0f;
 float scaleY = 1.0f;
 float scaleZ = 1.0f;
 
+//placeCam(0,0,-10,0,0,-5);
+
+//camera coordinates
+float cameraX = 0.0f;
+float cameraY = 0.0f;
+float cameraZ = -10.0f;
+
+//camera look at coordinates
+float lookAtX = 0.0f;
+float lookAtY = 0.0f;
+float lookAtZ = -5.0f;
+
 //transparency values
 float triangle1Alpha = 0.5f;
 float triangle2Alpha = 0.5f;
@@ -704,7 +716,8 @@ void renderScene(void) {
 	}
 
     //placeCam(10,2,10,0,2,-5);
-	placeCam(0,0,-10,0,0,-5);
+	//placeCam(0,0,-10,0,0,-5);
+	placeCam(cameraX,cameraY,cameraZ,lookAtX,lookAtY,lookAtZ);
 	zrd_glTranslatef(xdistance,ydistance,-zdistance);
 	zrd_glScalef(scaleX,scaleY,scaleZ);
 	zrd_glRotatef(myAngle2,1.0,0.0,0.0);

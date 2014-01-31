@@ -67,6 +67,9 @@ void main()
 	//Normal = vec3(tempVector[0],tempVector[1],tempVector[2]);
     Normal = normal;
 	gl_Position = projMatrix * viewMatrix * position ;
-	LightCoordinates = lightCoordinates;
+	vec4 tempLightCoords = vec4(lightCoordinates,1.0);
+	//vec4 newLightCoords = projMatrix*viewMatrix*tempLightCoords;
+	vec4 newLightCoords = tempLightCoords;
+	LightCoordinates = newLightCoords.xyz;
 	UV = vertexUV;
 }
