@@ -9,7 +9,7 @@ in vec2 UV;
 //values that stay constant
 uniform sampler2D zrdTextureSampler;
 
-uniform vec3 lightCoordinates;
+in vec3 LightCoordinates;
 
 in vec4 Color;
 in vec4 Position;
@@ -37,7 +37,7 @@ void main()
 	vec3 cameraCoordinates = vec3(0,0,-10);
 	float specularPower = 2.3;
 
-	vec3 lightVector = lightCoordinates - vec3(Position);
+	vec3 lightVector = LightCoordinates - vec3(Position);
 	float lightDistance = length(lightVector);
 	lightVector = normalize(lightVector);
 
