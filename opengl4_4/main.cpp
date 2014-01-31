@@ -174,6 +174,12 @@ GLfloat xdistance, ydistance, zdistance;
 GLuint projMatrixLoc, viewMatrixLoc;
 GLuint mouseCoordLocation;
 
+//whether or not the lights are on
+bool specular = true;
+bool ambient = true;
+bool diffuse = true;
+GLuint ambientLocation, specularLocation, diffuseLocation;
+
 //matrix stack
 static bool currentMatrix_modelView = true;
 static bool currentMatrix_projection = false;
@@ -693,6 +699,10 @@ void setUniforms() {
 	glUniform3f(lightLocation,lightX,lightY,lightZ);
 	glUniform2f(mouseCoordLocation,startX,startY);
 	glUniform1i(textureLocation,0);
+
+	glUniform1i(ambientLocation,ambient);
+	glUniform1i(diffuseLocation,diffuse);
+	glUniform1i(specularLocation,specular);
 }
  
 void renderScene(void) {
@@ -832,6 +842,10 @@ GLuint initShaders() {
 	textureLocation = glGetUniformLocation(p,"zrdTextureSampler");
 	lightLocation = glGetUniformLocation(p,"lightCoordinates");
 	mouseCoordLocation = glGetUniformLocation(p,"mouseCoordinates");
+	ambientLocation = glGetUniformLocation(p,"ambientOn");
+	diffuseLocation = glGetUniformLocation(p,"diffuseOn");
+	specularLocation = glGetUniformLocation(p,"specularOn");
+
     return(p);
 }
 
@@ -919,6 +933,17 @@ void readKeyboard( unsigned char key, int x, int y ){
 		  break;
 	  case 'n':
 		  lookAtX = lookAtX - 0.1;
+		  break;
+
+		  //turn on/off different lighting modes
+	  case 'x':
+		  ambient = !ambient;
+		  break;
+	  case 'c':
+		  specular = !specular;
+		  break;
+	  case 'v':
+		  diffuse = !diffuse;
 		  break;
 	  glutPostRedisplay( );
 	}
