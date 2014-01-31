@@ -128,9 +128,9 @@ float uvVertices4[] = {
 float vertices5[] = {   -1.0f, -1.0f, 1.0f,
             1.0f, -1.0f, -1.0f,
             -1.0f, -1.0f, -1.0f};
-float normals5[] = {   -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
+float normals5[] = {   -4.0f/3.0f, 0.0f, 4.0f/3.0f,
             -4.0f/3.0f, -8.0f/3.0f, 4.0f/3.0f,
-            0.0f, 0.0f, 4.0f,};
+            -4.0f/3.0f, -4.0f/3.0f, -4.0f/3.0f};
 float colors5[] = { 1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha};
@@ -143,9 +143,9 @@ float uvVertices5[] = {
 float vertices6[] = {   -1.0f, -1.0f, 1.0f,
             1.0f, -1.0f, -1.0f,
             1.0f, -1.0f, 1.0f};
-float normals6[] = {   -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f,
+float normals6[] = {   -4.0f/3.0f, 0.0f, 4.0f/3.0f,
             -4.0f/3.0f, -8.0f/3.0f, 4.0f/3.0f,
-            0.0f, 0.0f, 4.0f,};
+            -4.0f/3.0f, -4.0f/3.0f, 4.0f/3.0f};
 float colors6[] = { 1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha,
             1.0f, 1.0f, 0.0f, triangle2Alpha};
