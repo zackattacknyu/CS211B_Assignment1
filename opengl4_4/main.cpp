@@ -900,6 +900,20 @@ void readKeyboard( unsigned char key, int x, int y ){
 	  case 'h':
 		  cameraY = cameraY - 0.1;
 		  break;
+
+		  //look at movements
+	  case 'p':
+		  lookAtY = lookAtY + 0.1;
+		  break;
+	  case 'm':
+		  lookAtY = lookAtY - 0.1;
+		  break;
+	  case 'o':
+		  lookAtX = lookAtX + 0.1;
+		  break;
+	  case 'n':
+		  lookAtX = lookAtX - 0.1;
+		  break;
 	  glutPostRedisplay( );
 	}
 }
