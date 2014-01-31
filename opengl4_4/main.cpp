@@ -845,6 +845,8 @@ void readKeyboard( unsigned char key, int x, int y ){
 	  case  't':
 		  transparent = !transparent;
 		break;
+
+		//scaling
 	  case 'q':
 		  scaleX = scaleX + 0.05;
 		  scaleY = scaleY + 0.05;
@@ -855,6 +857,8 @@ void readKeyboard( unsigned char key, int x, int y ){
 		  scaleY = scaleY - 0.05;
 		  scaleZ = scaleZ - 0.05;
 		  break;
+
+		  //light movements
 	  case 'w':
 		  lightY = lightY + 0.1;
 		  break;
@@ -875,6 +879,26 @@ void readKeyboard( unsigned char key, int x, int y ){
 		  break;
 	  case 'g':
 		  animated = !animated;
+		  break;
+
+		  //camera movements
+	  case 'i':
+		  cameraZ = cameraZ - 0.1;
+		  break;
+	  case 'k':
+		  cameraZ = cameraZ + 0.1;
+		  break;
+	  case 'j':
+		  cameraX = cameraX + 0.1;
+		  break;
+	  case 'l':
+		  cameraX = cameraX - 0.1;
+		  break;
+	  case 'y':
+		  cameraY = cameraY + 0.1;
+		  break;
+	  case 'h':
+		  cameraY = cameraY - 0.1;
 		  break;
 	  glutPostRedisplay( );
 	}
