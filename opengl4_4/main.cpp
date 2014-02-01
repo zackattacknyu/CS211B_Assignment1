@@ -12,6 +12,7 @@ using namespace std;
 #define PI       3.14159265358979323846
 
 void drawTriangles();
+void initPickingTexture();
 void setTransMatrix(float *mat, float x, float y, float z);
 void multiplyMatrix(float *a, float *b);
 void xProduct( float *a, float *b, float *res);
@@ -63,6 +64,7 @@ int mouseMode = 0;
 int startX, startY;
 
 GLuint texturePointer, uvLoc, textureLocation;
+GLuint frameBuffer, pickingTexture, depthTexture;
 
 // vertices for triangle 1
 float vertices1[] = {   -1.0f, -1.0f, -1.0f,
@@ -1043,9 +1045,15 @@ int main(int argc, char **argv)
         exit(1);
     }
 
+	initPickingTexture();
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
 	char* filename = "chessBoard_wood_bmp.bmp";
 	texturePointer = loadBMP_custom(filename);
 	printf("%d",texturePointer);
+
+	
 
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.5,0.5,0.5,1.0);
@@ -1113,12 +1121,50 @@ GLuint loadBMP_custom(char filename[]){
     // Give the image to OpenGL
 	// image data is going into the "data" variable, that has been verified
     glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
-	// glTexStorage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height);
-	// glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_BGR, GL_UNSIGNED_BYTE, data);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
     return textureID;
 
+}
+
+void initPickingTexture(){
+
+	int width = 640;
+	int height = 480;
+
+	//create the frame buffer
+	glGenFramebuffers(1,&frameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER,frameBuffer);
+
+	//creates the picking texture
+	glGenTextures(1,&pickingTexture);
+	glBindTexture(GL_TEXTURE_2D,pickingTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32UI, width, height,
+                0, GL_RGB_INTEGER, GL_UNSIGNED_INT, NULL);
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 
+		pickingTexture, 0); 
+
+	//creates the texture for the depth information
+	glGenTextures(1, &depthTexture);
+	glBindTexture(GL_TEXTURE_2D, depthTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 
+                0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 
+		depthTexture, 0); 
+
+    // Disable reading to avoid problems with older GPUs
+    //glReadBuffer(GL_NONE);
+
+    // Verify that the FBO is correct
+    GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+    if (Status != GL_FRAMEBUFFER_COMPLETE) {
+        printf("\nFB error, status: 0x%x\n", Status);
+    }
+
+    // Restore the default framebuffer
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
