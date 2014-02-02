@@ -11,6 +11,9 @@ uniform bool specularOn;
 uniform bool diffuseOn;
 uniform bool ambientOn;
 
+//if object is picked, color is displayed
+uniform bool showTrueColor;
+
 //values that stay constant
 uniform sampler2D zrdTextureSampler;
 
@@ -110,8 +113,12 @@ void main()
 	/*code here to set unlit color differently if object is selected by user
 	*
 	*/
+	if(showTrueColor){
+		unlitColor = Color.xyz;
+	}else{
+		unlitColor = texture(zrdTextureSampler,UV).rgb;
+	}
 
-	unlitColor = texture(zrdTextureSampler,UV).rgb;
 	vec3 outputColor = unlitColor*outputLight;
 	outputF = vec4(outputColor,Color.w);
 	//outputF = vec4(mouseX,mouseY,1.0,Color.w);

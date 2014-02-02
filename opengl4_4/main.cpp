@@ -81,9 +81,11 @@ float angle = 0.0f;
 int mouseMode = 0;
 GLint startX, startY;
 bool mouseIsDown = false;
+bool showTrueColor = false;
 
 GLuint texturePointer, uvLoc, textureLocation;
 GLuint frameBuffer, pickingTexture, depthTexture;
+GLuint showTrueColorLocation;
 
 GLuint drawIndexLocation,drawIndex;
 GLuint objectIndex, objectIndexLocation;
@@ -727,6 +729,7 @@ void setUniforms() {
 	glUniform1i(ambientLocation,ambient);
 	glUniform1i(diffuseLocation,diffuse);
 	glUniform1i(specularLocation,specular);
+	glUniform1i(showTrueColorLocation,showTrueColor);
 	glUniform1ui(drawIndexLocation, drawIndex);
 	glUniform1ui(objectIndexLocation, objectIndex);
 }
@@ -778,6 +781,12 @@ void renderScene(void) {
 		printf("%d ",pixelData.DrawID);
 		printf("%d ",pixelData.ObjectID);
 		printf("%d\n",pixelData.PrimID);*/
+
+		printf("\n mouseX=%d",startX);
+		printf("  mouseY=%d",startY);
+		showTrueColor = true;
+	}else{
+		showTrueColor = false;
 	}
 
 	drawTriangles();
@@ -898,6 +907,7 @@ GLuint initShaders() {
 	ambientLocation = glGetUniformLocation(p,"ambientOn");
 	diffuseLocation = glGetUniformLocation(p,"diffuseOn");
 	specularLocation = glGetUniformLocation(p,"specularOn");
+	showTrueColorLocation = glGetUniformLocation(p,"showTrueColor");
 
 	drawIndexLocation = glGetUniformLocation(p,"gDrawIndex");
 	objectIndexLocation = glGetUniformLocation(p,"gObjectIndex");
