@@ -1129,6 +1129,14 @@ GLuint loadBMP_custom(char filename[]){
 
 }
 
+void enableWriting(){
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
+}
+
+void disableWriting(){
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+}
+
 void initPickingTexture(){
 
 	int width = 640;
