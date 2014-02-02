@@ -24,13 +24,25 @@ float * rotationMatrix(float x, float y, float z, float angle);
 GLuint loadBMP_custom(char filename[]);
 void enableWriting();
 void disableWriting();
-unsigned int* readPixel(GLint x, GLint y);
+void readPixel(GLint x, GLint y);
 
 struct vec3
 {
 	float x;
 	float y;
 	float z;
+};
+
+struct PixelInfo {
+        unsigned int ObjectID;
+        unsigned int DrawID;
+        unsigned int PrimID;
+
+        PixelInfo()     {
+            ObjectID = 0;
+            DrawID = 0;
+            PrimID = 0;
+        }
 };
 
 //lighting Coordinates
@@ -56,6 +68,8 @@ float lookAtX = 0.0f;
 float lookAtY = 0.0f;
 float lookAtZ = -5.0f;
 
+static PixelInfo pixelData;
+
 //transparency values
 float triangle1Alpha = 0.5f;
 float triangle2Alpha = 0.5f;
@@ -69,6 +83,9 @@ bool mouseIsDown = false;
 
 GLuint texturePointer, uvLoc, textureLocation;
 GLuint frameBuffer, pickingTexture, depthTexture;
+
+GLuint drawIndexLocation,drawIndex;
+GLuint objectIndex, objectIndexLocation;
 
 // vertices for triangle 1
 float vertices1[] = {   -1.0f, -1.0f, -1.0f,
@@ -204,7 +221,7 @@ float myAngle2 = 0.0f;
 
 int frame=0,time,timebase=0;
 char s[50];
- 
+
 // vector opt
 // res = a cross b;
 void xProduct( float *a, float *b, float *res) 
@@ -709,6 +726,8 @@ void setUniforms() {
 	glUniform1i(ambientLocation,ambient);
 	glUniform1i(diffuseLocation,diffuse);
 	glUniform1i(specularLocation,specular);
+	glUniform1ui(drawIndexLocation, drawIndex);
+	glUniform1ui(objectIndexLocation, objectIndex);
 }
  
 void renderScene(void) {
@@ -748,11 +767,11 @@ void renderScene(void) {
 		drawTriangles();
 		disableWriting();
 
-		unsigned int* result = readPixel(startX,startY);
+		readPixel(startX,startY);
 
-		printf("%d\n",result[0]);
-		printf("%d\n",result[1]);
-		printf("%d\n",result[2]);
+		printf("%d\n",pixelData.DrawID);
+		printf("%d\n",pixelData.ObjectID);
+		printf("%d\n",pixelData.PrimID);
 	}
 
 	drawTriangles();
@@ -765,6 +784,9 @@ void renderScene(void) {
 
 void drawTriangles(){
 
+	objectIndex = 1;
+	drawIndex = 1;
+
 	glBindVertexArray(vert[0]);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -776,7 +798,7 @@ void drawTriangles(){
 
 	glBindVertexArray(vert[3]);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
-	
+
 	glBindVertexArray(vert[4]);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -864,6 +886,9 @@ GLuint initShaders() {
 	ambientLocation = glGetUniformLocation(p,"ambientOn");
 	diffuseLocation = glGetUniformLocation(p,"diffuseOn");
 	specularLocation = glGetUniformLocation(p,"specularOn");
+
+	drawIndexLocation = glGetUniformLocation(p,"gDrawIndex");
+	objectIndexLocation = glGetUniformLocation(p,"gObjectIndex");
 
     return(p);
 }
@@ -1075,8 +1100,6 @@ int main(int argc, char **argv)
     setupBuffers(); 
     glutMainLoop();
 
-	
- 
     return(0); 
 }
 
@@ -1151,18 +1174,17 @@ void disableWriting(){
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
-unsigned int* readPixel(GLint x, GLint y)
+void readPixel(GLint x, GLint y)
 {
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer);
     glReadBuffer(GL_COLOR_ATTACHMENT0);
 
-	unsigned int* pixelInfo = new unsigned int[3];
-    glReadPixels(x, y, 1, 1, GL_RGB_INTEGER, GL_UNSIGNED_INT, pixelInfo);
+	
+    glReadPixels(x, y, 1, 1, GL_RGB_INTEGER, GL_UNSIGNED_INT, &pixelData);
 
     glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 
-	return pixelInfo;
 }
 
 void initPickingTexture(){
