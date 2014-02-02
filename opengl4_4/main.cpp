@@ -741,8 +741,7 @@ void renderScene(void) {
 		frame = 0;
 	}
     glutSetWindowTitle(s);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
- 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if(transparent){
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA,GL_SRC_ALPHA);
