@@ -768,9 +768,8 @@ void renderScene(void) {
 		disableWriting();
 
 		readPixel(startX,startY);
-
-		printf("%d\n",pixelData.DrawID);
-		printf("%d\n",pixelData.ObjectID);
+		printf("%d ",pixelData.DrawID);
+		printf("%d ",pixelData.ObjectID);
 		printf("%d\n",pixelData.PrimID);
 	}
 
@@ -785,23 +784,28 @@ void renderScene(void) {
 void drawTriangles(){
 
 	objectIndex = 1;
-	drawIndex = 1;
 
+	drawIndex = 1;
 	glBindVertexArray(vert[0]);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
+	drawIndex = 2;
 	glBindVertexArray(vert[1]);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
+	drawIndex = 3;
 	glBindVertexArray(vert[2]);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
+	drawIndex = 4;
 	glBindVertexArray(vert[3]);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
+	drawIndex = 5;
 	glBindVertexArray(vert[4]);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
+	drawIndex = 6;
 	glBindVertexArray(vert[5]);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
