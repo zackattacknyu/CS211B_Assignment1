@@ -1137,6 +1137,20 @@ void disableWriting(){
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
+unsigned int* readPixel(unsigned int x, unsigned int y)
+{
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer);
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+
+	unsigned int* pixelInfo = new unsigned int[3];
+    glReadPixels(x, y, 1, 1, GL_RGB_INTEGER, GL_UNSIGNED_INT, &pixelInfo);
+
+    glReadBuffer(GL_NONE);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+
+	return pixelInfo;
+}
+
 void initPickingTexture(){
 
 	int width = 640;
