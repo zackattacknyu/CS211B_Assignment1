@@ -57,6 +57,9 @@ float scaleX = 1.0f;
 float scaleY = 1.0f;
 float scaleZ = 1.0f;
 
+int lastMouseX;
+int lastMouseY;
+
 //placeCam(0,0,-10,0,0,-5);
 
 //camera coordinates
@@ -782,9 +785,24 @@ void renderScene(void) {
 		printf("%d ",pixelData.ObjectID);
 		printf("%d\n",pixelData.PrimID);*/
 
-		printf("\n mouseX=%d",startX);
-		printf("  mouseY=%d",startY);
-		showTrueColor = true;
+		if(startX != lastMouseX && startY != lastMouseY){
+			printf("\n mouseX=%d",startX);
+			printf("  mouseY=%d",startY);
+			lastMouseX = startX;
+			lastMouseY = startY;
+		}
+		
+
+		int centerX = 320;
+		int centerY = 240;
+		int range = 60;
+		bool inXrange = (startX > centerX - range && startX < centerX + range);
+		bool inYrange = (startY > centerY - range && startY < centerY + range);
+		if(inXrange && inYrange){
+			showTrueColor = true;
+		}
+
+		
 	}else{
 		showTrueColor = false;
 	}
