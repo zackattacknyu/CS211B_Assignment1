@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 #include "glew\include\GL\glew.h"
 #include "glut\glut.h"
@@ -25,6 +25,7 @@ GLuint loadBMP_custom(char filename[]);
 void enableWriting();
 void disableWriting();
 void readPixel(GLint x, GLint y);
+void checkFrameBuffer();
 
 struct vec3
 {
@@ -761,15 +762,22 @@ void renderScene(void) {
     setUniforms();
 	
 	if(mouseIsDown){
+		
+		/*
+
+		This is code to try and do the picking using the frame buffer
+		It did not end up working due to the following error being returned by 
+			the check of the frame buffer status:
+			GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT​
 
 		enableWriting();
 		drawTriangles();
 		disableWriting();
-
+		
 		readPixel(startX,startY);
 		printf("%d ",pixelData.DrawID);
 		printf("%d ",pixelData.ObjectID);
-		printf("%d\n",pixelData.PrimID);
+		printf("%d\n",pixelData.PrimID);*/
 	}
 
 	drawTriangles();
@@ -777,6 +785,7 @@ void renderScene(void) {
 	//zrd_glTranslatef(0,0,4);
 	
 	//drawTriangles();
+	checkFrameBuffer();
    glutSwapBuffers();
 }
 
@@ -1093,10 +1102,10 @@ int main(int argc, char **argv)
         printf("OpenGL 3.3 not supported\n");
         exit(1);
     }
+
 	initPickingTexture();
 	char* filename = "chessBoard_wood_bmp.bmp";
 	texturePointer = loadBMP_custom(filename);
-
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.5,0.5,0.5,1.0);
     p = initShaders(); 
@@ -1182,7 +1191,6 @@ void readPixel(GLint x, GLint y)
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer);
     glReadBuffer(GL_COLOR_ATTACHMENT0);
 
-	
     glReadPixels(x, y, 1, 1, GL_RGB_INTEGER, GL_UNSIGNED_INT, &pixelData);
 
     glReadBuffer(GL_NONE);
@@ -1199,26 +1207,57 @@ void initPickingTexture(){
 	glGenFramebuffers(1,&frameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER,frameBuffer);
 
+	checkFrameBuffer();
+
 	//creates the picking texture
 	glGenTextures(1,&pickingTexture);
 	glBindTexture(GL_TEXTURE_2D,pickingTexture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32UI, width, height,
-                0, GL_RGB_INTEGER, GL_UNSIGNED_INT, NULL);
+		0, GL_RGB_INTEGER, GL_INT, NULL);
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 
 		pickingTexture, 0); 
 
 	//creates the texture for the depth information
 	glGenTextures(1, &depthTexture);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
+	
+	checkFrameBuffer();
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 
                 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 
 		depthTexture, 0); 
 
+	
+
     // Disable reading to avoid problems with older GPUs
     glReadBuffer(GL_NONE);
 
-    // Verify that the FBO is correct
+	checkFrameBuffer();
+
+    // Restore the default framebuffer
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	/* Unfortunately, this function kept returning the following error:
+		GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+	*/
+	checkFrameBuffer();
+}
+
+void checkFrameBuffer(){
+	// Verify that the FBO is correct
     GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
     if (Status != GL_FRAMEBUFFER_COMPLETE) {
@@ -1260,8 +1299,4 @@ void initPickingTexture(){
 	if(Status == GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS){
 		printf("\n GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS\n");
 	}
-
-    // Restore the default framebuffer
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
