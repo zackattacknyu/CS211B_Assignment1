@@ -1225,6 +1225,42 @@ void initPickingTexture(){
         printf("\nFB error, status: 0x%x\n", Status);
     }
 
+	if(Status == GL_FRAMEBUFFER_UNDEFINED){
+		printf("\n GL_FRAMEBUFFER_UNDEFINED\n");
+	}
+	
+	if(Status == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT){
+		printf("\n GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT\n");
+	}
+
+	if(Status == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT){
+		printf("\n GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT\n");
+	}
+
+	if(Status == GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER){
+		printf("\n GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER\n");
+	}
+
+	if(Status == GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER){
+		printf("\n GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER\n");
+	}
+
+	if(Status == GL_FRAMEBUFFER_UNSUPPORTED){
+		printf("\n GL_FRAMEBUFFER_UNSUPPORTED\n");
+	}
+
+	if(Status == GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE){
+		printf("\n GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE\n");
+	}
+
+	if(Status == GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE){
+		printf("\n GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE\n");
+	}
+
+	if(Status == GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS){
+		printf("\n GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS\n");
+	}
+
     // Restore the default framebuffer
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
