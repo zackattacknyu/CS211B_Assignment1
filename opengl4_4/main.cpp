@@ -1059,17 +1059,13 @@ void mouseMove(int x, int y)
 
 		//translation mode
 
-		printf("centerX=%d ",centerX);
-		printf("centerY=%d ",centerY);
-		centerX = centerX + (x - startX);
-		centerY = centerY + (y - startY);
-		printf(" centerX'=%d ",centerX);
-		printf("centerY'=%d\n",centerY);
-
 		xdistance = xdistance - (x - startX)/100.0;
 		ydistance = ydistance - (y - startY)/100.0;
 		startX = x;
 		startY = y;
+
+		centerX = 320 - floor(xdistance*range);
+		centerY = 240 - floor(ydistance*range);
 		
 
 	}else if(mouseMode == 3){
