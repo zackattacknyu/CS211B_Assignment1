@@ -1056,7 +1056,7 @@ void mouseMove(int x, int y)
 		printf("centerX=%d ",centerX);
 		printf("centerY=%d ",centerY);
 		centerX = centerX + (x - startX);
-		centerY = centerY - (y - startY);
+		centerY = centerY + (y - startY);
 		printf(" centerX'=%d ",centerX);
 		printf("centerY'=%d\n",centerY);
 
