@@ -1070,9 +1070,9 @@ void mouseMove(int x, int y)
 
 void readIfObjectClicked(){
 	glReadPixels(startX,startY,1,1,GL_RGB,GL_UNSIGNED_BYTE,&pixelColorInfo);
-	printf("\nColor=%d,",pixelColorInfo.redComponent);
-	printf("%d,",pixelColorInfo.greenComponent);
-	printf("%d\n",pixelColorInfo.blueComponent);
+	//printf("\nColor=%d,",pixelColorInfo.redComponent);
+	//printf("%d,",pixelColorInfo.greenComponent);
+	//printf("%d\n",pixelColorInfo.blueComponent);
 	if(pixelColorInfo.redComponent == 128 && pixelColorInfo.greenComponent == 128 && pixelColorInfo.blueComponent == 128){
 		showTrueColor = false;
 	}else{
