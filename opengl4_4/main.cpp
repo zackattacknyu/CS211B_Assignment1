@@ -795,6 +795,7 @@ void renderScene(void) {
 			printf("  mouseY=%d",startY);
 			printf(" centerX=%d",centerX);
 			printf("  centerY=%d",centerY);
+			printf("  range=%d",range);
 			lastMouseX = startX;
 			lastMouseY = startY;
 		}
@@ -941,6 +942,7 @@ int xOrigin = -1;
 
 
 void readKeyboard( unsigned char key, int x, int y ){
+	float newRange;
   switch( key ){
 	  case  0x1B: /* esc */
 	  case  't':
@@ -952,11 +954,14 @@ void readKeyboard( unsigned char key, int x, int y ){
 		  scaleX = scaleX + 0.05;
 		  scaleY = scaleY + 0.05;
 		  scaleZ = scaleZ + 0.05;
+		  range = floor(60.0f*scaleX);
 		  break;
 	  case 'z':
 		  scaleX = scaleX - 0.05;
 		  scaleY = scaleY - 0.05;
 		  scaleZ = scaleZ - 0.05;
+		  range = floor(60.0f*scaleX);
+
 		  break;
 
 		  //light movements

@@ -104,23 +104,51 @@ void main()
 		outputLight = vec3(1,1,1);
 	}
 
-	//vec3 outputLight = ambientMaterial;
-	//vec3 outputLight = diffuseLight;
-	//vec3 outputLight = specularLight;
-
 	vec3 unlitColor;
+	unlitColor = texture(zrdTextureSampler,UV).rgb;
 
-	/*code here to set unlit color differently if object is selected by user
-	*
-	*/
 	if(showTrueColor){
 		unlitColor = Color.xyz;
-	}else{
-		unlitColor = texture(zrdTextureSampler,UV).rgb;
 	}
+
+	/*
+	This block of code was an attempt to use mouse transformations to select an object
+
+	vec4 topLeft = vec4(-1.0,1.0,0.0,1.0);
+	vec4 topRight = vec4(1.0,1.0,0.0,1.0);
+	vec4 bottomRight = vec4(1.0,-1.0,1.0,1.0);
+	vec4 bottomLeft = vec4(-1.0,-1.0,1.0,1.0);
+
+	vec4 topLeftTransformed = projMatrix*viewMatrix*topLeft;
+	vec4 topRightTransformed = projMatrix*viewMatrix*topRight;
+	vec4 bottomRightTransformed = projMatrix*viewMatrix*bottomRight;
+	vec4 bottomLeftTransformed = projMatrix*viewMatrix*bottomLeft;
+
+	float bottomY = min(bottomLeftTransformed.y,bottomRightTransformed.y);
+	bottomY = min(bottomY, topLeftTransformed.y);
+	bottomY = min(bottomY, topRightTransformed.y);
+
+	float leftX = min(bottomLeftTransformed.x,bottomRightTransformed.x);
+	leftX = min(leftX, topLeftTransformed.x);
+	leftX = min(leftX, topRightTransformed.x);
+
+	float topY = max(bottomLeftTransformed.y,bottomRightTransformed.y);
+	topY = max(topY, topLeftTransformed.y);
+	topY = max(topY, topRightTransformed.y);
+
+	float rightX = min(bottomLeftTransformed.x,bottomRightTransformed.x);
+	rightX = min(rightX, topLeftTransformed.x);
+	rightX = min(rightX, topRightTransformed.x);
+
+	if(mouseCoordinates.x > leftX && mouseCoordinates.x < rightX){
+		unlitColor = Color.xyz;
+	}
+	if(mouseCoordinates.y > bottomY && mouseCoordinates.y < topY){
+		unlitColor = Color.xyz;
+	}
+	*/
+
 
 	vec3 outputColor = unlitColor*outputLight;
 	outputF = vec4(outputColor,Color.w);
-	//outputF = vec4(mouseX,mouseY,1.0,Color.w);
-	//outputF = vec4(UV,1.0,1.0);
 }
