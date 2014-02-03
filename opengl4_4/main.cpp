@@ -86,6 +86,11 @@ GLint startX, startY;
 bool mouseIsDown = false;
 bool showTrueColor = false;
 
+//use for position of object in window coordinates
+int centerX = 320;
+int centerY = 240;
+int range = 60;
+
 GLuint texturePointer, uvLoc, textureLocation;
 GLuint frameBuffer, pickingTexture, depthTexture;
 GLuint showTrueColorLocation;
@@ -788,14 +793,12 @@ void renderScene(void) {
 		if(startX != lastMouseX && startY != lastMouseY){
 			printf("\n mouseX=%d",startX);
 			printf("  mouseY=%d",startY);
+			printf(" centerX=%d",centerX);
+			printf("  centerY=%d",centerY);
 			lastMouseX = startX;
 			lastMouseY = startY;
 		}
 		
-
-		int centerX = 320;
-		int centerY = 240;
-		int range = 60;
 		bool inXrange = (startX > centerX - range && startX < centerX + range);
 		bool inYrange = (startY > centerY - range && startY < centerY + range);
 		if(inXrange && inYrange){
@@ -1049,10 +1052,19 @@ void mouseMove(int x, int y)
 	}else if(mouseMode == 2){
 
 		//translation mode
+
+		printf("centerX=%d ",centerX);
+		printf("centerY=%d ",centerY);
+		centerX = centerX + (x - startX);
+		centerY = centerY - (y - startY);
+		printf(" centerX'=%d ",centerX);
+		printf("centerY'=%d\n",centerY);
+
 		xdistance = xdistance - (x - startX)/100.0;
 		ydistance = ydistance - (y - startY)/100.0;
 		startX = x;
 		startY = y;
+		
 
 	}else if(mouseMode == 3){
 
