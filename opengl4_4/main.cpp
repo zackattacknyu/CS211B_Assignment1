@@ -389,6 +389,18 @@ void multiplyMatrix(float *a, float *b)
     memcpy(a, res, 16 * sizeof(float));
 }
 
+void multiplyMatrixAndVector(float *mat, float *vec, float* res) 
+{
+    res = new float[4];
+ 
+    for (int i = 0; i < 4; ++i) {
+		res[i] = 0.0f;
+        for (int j = 0; j < 4; ++j) {
+            res[i] = res[i] + mat[4*i + j]*vec[i];
+        }
+    }
+}
+
 // sets the square matrix mat to the ID matrix,
 void setIdentMatrix( float *mat, int size) 
 {
