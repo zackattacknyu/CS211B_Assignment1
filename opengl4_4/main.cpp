@@ -1046,6 +1046,7 @@ void readKeyboard( unsigned char key, int x, int y ){
 void mouseMove(int x, int y) 
 {
 	// x and y is the mouse position.
+	float factor;
 	if(mouseMode == 1){
 
 		//rotation mode
@@ -1077,7 +1078,8 @@ void mouseMove(int x, int y)
 		zdistance = zdistance - (y - startY)/10.0;
 		startX = x;
 		startY = y;
-
+		factor = (cameraZ - zdistance)/(cameraZ);
+		range = factor*60;
 	}
 }
 
