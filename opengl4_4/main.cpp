@@ -26,7 +26,7 @@ void enableWriting();
 void disableWriting();
 void readPixel(GLint x, GLint y);
 void checkFrameBuffer();
-
+void readIfObjectClicked();
 struct vec3
 {
 	float x;
@@ -45,7 +45,7 @@ struct PixelInfo {
             PrimID = 0;
         }
 };
-
+struct{GLubyte redComponent, greenComponent, blueComponent;} pixelColorInfo;
 //lighting Coordinates
 float lightX = -1.0f;
 float lightY = 0.0f;
@@ -86,10 +86,6 @@ GLint startX, startY;
 bool mouseIsDown = false;
 bool showTrueColor = false;
 
-//use for position of object in window coordinates
-int centerX = 320;
-int centerY = 240;
-int range = 60;
 
 GLuint texturePointer, uvLoc, textureLocation;
 GLuint frameBuffer, pickingTexture, depthTexture;
@@ -802,29 +798,16 @@ void renderScene(void) {
 		printf("%d ",pixelData.ObjectID);
 		printf("%d\n",pixelData.PrimID);*/
 
-		if(startX != lastMouseX && startY != lastMouseY){
-			printf("\n mouseX=%d",startX);
-			printf("  mouseY=%d",startY);
-			printf(" centerX=%d",centerX);
-			printf("  centerY=%d",centerY);
-			printf("  range=%d",range);
-			lastMouseX = startX;
-			lastMouseY = startY;
-		}
-		
-		bool inXrange = (startX > centerX - range && startX < centerX + range);
-		bool inYrange = (startY > centerY - range && startY < centerY + range);
-		if(inXrange && inYrange){
-			showTrueColor = true;
-		}
+		drawTriangles();
+		readIfObjectClicked();
 
 		
 	}else{
 		showTrueColor = false;
 	}
 
+	
 	drawTriangles();
-
 	//zrd_glTranslatef(0,0,4);
 	
 	//drawTriangles();
@@ -966,13 +949,11 @@ void readKeyboard( unsigned char key, int x, int y ){
 		  scaleX = scaleX + 0.05;
 		  scaleY = scaleY + 0.05;
 		  scaleZ = scaleZ + 0.05;
-		  range = floor(60.0f*scaleX);
 		  break;
 	  case 'z':
 		  scaleX = scaleX - 0.05;
 		  scaleY = scaleY - 0.05;
 		  scaleZ = scaleZ - 0.05;
-		  range = floor(60.0f*scaleX);
 
 		  break;
 
@@ -1075,9 +1056,6 @@ void mouseMove(int x, int y)
 		ydistance = ydistance - (y - startY)/100.0;
 		startX = x;
 		startY = y;
-
-		centerX = 320 + floor(xdistance*range);
-		centerY = 240 - floor(ydistance*range);
 		
 
 	}else if(mouseMode == 3){
@@ -1087,9 +1065,21 @@ void mouseMove(int x, int y)
 		startX = x;
 		startY = y;
 		factor = (cameraZ - zdistance)/(cameraZ);
-		range = factor*60;
 	}
 }
+
+void readIfObjectClicked(){
+	glReadPixels(startX,startY,1,1,GL_RGB,GL_UNSIGNED_BYTE,&pixelColorInfo);
+	printf("\nColor=%d,",pixelColorInfo.redComponent);
+	printf("%d,",pixelColorInfo.greenComponent);
+	printf("%d\n",pixelColorInfo.blueComponent);
+	if(pixelColorInfo.redComponent == 128 && pixelColorInfo.greenComponent == 128 && pixelColorInfo.blueComponent == 128){
+		showTrueColor = false;
+	}else{
+		showTrueColor = true;
+	}
+}
+
 
 //This event occur when you press a mouse button.
 void mouseButton(int button, int state, int x, int y) 
