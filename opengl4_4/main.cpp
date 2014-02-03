@@ -1051,7 +1051,7 @@ void mouseMove(int x, int y)
 
 		//rotation mode
 		myAngle = myAngle - (x - startX)/10.0;
-		myAngle2 = myAngle2 + (y - startY)/10.0;
+		myAngle2 = myAngle2 - (y - startY)/10.0;
 		startX = x;
 		startY = y;
 
@@ -1059,19 +1059,19 @@ void mouseMove(int x, int y)
 
 		//translation mode
 
-		xdistance = xdistance - (x - startX)/100.0;
+		xdistance = xdistance + (x - startX)/100.0;
 		ydistance = ydistance - (y - startY)/100.0;
 		startX = x;
 		startY = y;
 
-		centerX = 320 - floor(xdistance*range);
+		centerX = 320 + floor(xdistance*range);
 		centerY = 240 - floor(ydistance*range);
 		
 
 	}else if(mouseMode == 3){
 
 		//zooming mode
-		zdistance = zdistance - (y - startY)/10.0;
+		zdistance = zdistance + (y - startY)/10.0;
 		startX = x;
 		startY = y;
 		factor = (cameraZ - zdistance)/(cameraZ);
