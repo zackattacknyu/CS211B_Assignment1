@@ -65,12 +65,12 @@ int lastMouseY;
 //camera coordinates
 float cameraX = 0.0f;
 float cameraY = 0.0f;
-float cameraZ = -10.0f;
+float cameraZ = 10.0f;
 
 //camera look at coordinates
 float lookAtX = 0.0f;
 float lookAtY = 0.0f;
-float lookAtZ = -5.0f;
+float lookAtZ = 0.0f;
 
 static PixelInfo pixelData;
 
