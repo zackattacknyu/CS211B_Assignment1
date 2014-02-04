@@ -56,7 +56,8 @@ float lightW = 1.0f;
 float scaleX = 1.0f;
 float scaleY = 1.0f;
 float scaleZ = 1.0f;
-
+float screenHeight = 480.0f;
+float screenWidth = 640.0f;
 int lastMouseX;
 int lastMouseY;
 
@@ -528,6 +529,10 @@ void changeSize(int w, int h) {
     // place viewport to be the entire window
     glViewport(0, 0, w, h);
     ratio = (1.0f * w) / h;
+
+	screenHeight = h;
+	screenWidth = w;
+
     buildProjMatrix(53.13f, ratio, 1.0f, 30.0f);
 }
  
@@ -730,7 +735,7 @@ void setUniforms() {
 	glUniform4fv(axisLocation,1,vector);
 	glUniform1f(angleLoc,myAngle);
 
-	float theRatio = 640.0f/480.0f;
+	float theRatio = screenWidth/screenHeight;
 	buildProjMatrix(53.13f,theRatio,1.0f,30.0f);
 
 	glUniform1f(fovLocation,53.13);
@@ -1069,7 +1074,7 @@ void mouseMove(int x, int y)
 }
 
 void readIfObjectClicked(){
-	glReadPixels(startX,startY,1,1,GL_RGB,GL_UNSIGNED_BYTE,&pixelColorInfo);
+	glReadPixels(startX,screenHeight-startY,1,1,GL_RGB,GL_UNSIGNED_BYTE,&pixelColorInfo);
 	//printf("\nColor=%d,",pixelColorInfo.redComponent);
 	//printf("%d,",pixelColorInfo.greenComponent);
 	//printf("%d\n",pixelColorInfo.blueComponent);
