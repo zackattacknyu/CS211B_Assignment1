@@ -8,6 +8,8 @@ in vec4 position;
 in vec4 color;
 in vec3 normal;
 
+uniform int lightMode;
+
 uniform vec3 lightCoordinates;
 
 // Texture stuff
@@ -70,7 +72,22 @@ void main()
 	gl_Position = projMatrix * viewMatrix * position ;
 
 	vec4 tempLightCoords = vec4(lightCoordinates.xyz,1.0);
-	tempLightCoords = currentViewMatrix*tempLightCoords;
+
+	if(lightMode == 0){
+
+		//light coordinates are static
+
+	}else if(lightMode == 1){
+		
+		//light coordinates multiplied by view matrix
+		tempLightCoords = currentViewMatrix*tempLightCoords;
+	
+	}else if(lightMode == 2){
+		
+		//light coordinates multiplied by model-view matrix
+		tempLightCoords = viewMatrix*tempLightCoords;
+	
+	}
 	LightCoordinates = vec3(tempLightCoords[0],tempLightCoords[1],tempLightCoords[2]);
 	UV = vertexUV;
 

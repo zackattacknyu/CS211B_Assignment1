@@ -47,9 +47,9 @@ struct PixelInfo {
 };
 struct{GLubyte redComponent, greenComponent, blueComponent;} pixelColorInfo;
 //lighting Coordinates
-float lightX = -1.0f;
-float lightY = 0.0f;
-float lightZ = 1.0f;
+float lightX = 0.0f;
+float lightY = -1.2f;
+float lightZ = 0.0f;
 float lightW = 1.0f;
 
 //scaling coordinates
@@ -60,6 +60,10 @@ float screenHeight = 480.0f;
 float screenWidth = 640.0f;
 int lastMouseX;
 int lastMouseY;
+
+//light moving mode
+int lightMode = 0;
+GLuint lightModeLocation;
 
 //placeCam(0,0,-10,0,0,-5);
 
@@ -453,8 +457,17 @@ void placeCam(float posX, float posY, float posZ, float lookX, float lookY, floa
     tempViewMatrix[13] = 0.0f;
     tempViewMatrix[14] =  0.0f;
     tempViewMatrix[15] = 1.0f;
+
+
+
+
     setTransMatrix(aux, -posX, -posY, -posZ);
     multiplyMatrix(tempViewMatrix, aux);
+
+	currentViewMatrix = new float[16];
+	for(int index = 0; index < 16; index++){
+		currentViewMatrix[index] = tempViewMatrix[index];
+	}
 
 	if(modelViewMatrix_stack.size() == 0){
 		zrd_glInit();
@@ -463,7 +476,7 @@ void placeCam(float posX, float posY, float posZ, float lookX, float lookY, floa
 	modelViewMatrix_stack.pop();
 	modelViewMatrix_stack.push(tempViewMatrix);
 
-	currentViewMatrix = tempViewMatrix;
+	//currentViewMatrix = tempViewMatrix;
 	
 	// you should do this instead. If you want to apply rotation to your viewMatrix.
 	//multiplyMatrix(viewMatrix, rotationMatrix(0.0,0.0,1.0, 0.785)); 
@@ -758,6 +771,8 @@ void setUniforms() {
 	glUniform1i(showTrueColorLocation,showTrueColor);
 	glUniform1ui(drawIndexLocation, drawIndex);
 	glUniform1ui(objectIndexLocation, objectIndex);
+
+	glUniform1i(lightModeLocation,lightMode);
 }
  
 void renderScene(void) {
@@ -940,6 +955,8 @@ GLuint initShaders() {
 	objectIndexLocation = glGetUniformLocation(p,"gObjectIndex");
 	currentViewMatrixLoc = glGetUniformLocation(p,"currentViewMatrix");
 
+	lightModeLocation = glGetUniformLocation(p,"lightMode");
+
     return(p);
 }
 
@@ -951,6 +968,9 @@ void readKeyboard( unsigned char key, int x, int y ){
 	float newRange;
   switch( key ){
 	  case  0x1B: /* esc */
+	  case 'b':
+		  lightMode = (lightMode + 1)%3;
+		  break;
 	  case  't':
 		  transparent = !transparent;
 		break;
