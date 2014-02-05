@@ -55,19 +55,22 @@ void main()
 	vec4 axis = vec4(2.0,0.0,0.0,0.0);
 	vec3 pos = vec3(0.0,0.0,0.0);
     Color = color;
-	Position = position;
+	Position = viewMatrix *position;
 	// Matrix multiplication is not commutative, i.e. the order of operations matters. 
 	// The transformations on a vertex' position, in order are:
 	// model
 	// view
 	// projection
 
-	//mat4 normalMatrix = transpose(inverse(viewMatrix));
-	//vec4 tempVector = normalMatrix * vec4(normal.x, normal.y, normal.z,0);
-	//Normal = vec3(tempVector[0],tempVector[1],tempVector[2]);
-    Normal = normal;
+	mat4 normalMatrix = transpose(inverse(viewMatrix));
+	vec4 tempVector = normalMatrix * vec4(normal.x, normal.y, normal.z,0);
+	Normal = vec3(tempVector[0],tempVector[1],tempVector[2]);
+    //Normal = normal;
 	gl_Position = projMatrix * viewMatrix * position ;
-	LightCoordinates = lightCoordinates;
+
+	vec4 tempLightCoords = vec4(lightCoordinates.xyz,1.0);
+	tempLightCoords = viewMatrix*tempLightCoords;
+	LightCoordinates = vec3(tempLightCoords[0],tempLightCoords[1],tempLightCoords[2]);
 	UV = vertexUV;
 
 }
