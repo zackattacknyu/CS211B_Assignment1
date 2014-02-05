@@ -1,6 +1,7 @@
 #version 330
  
 uniform mat4 viewMatrix, projMatrix;
+uniform mat4 currentViewMatrix;
 uniform sampler2D zrdTextureSampler;
 uniform vec2 mouseCoordinates;
 in vec4 position;
@@ -69,7 +70,7 @@ void main()
 	gl_Position = projMatrix * viewMatrix * position ;
 
 	vec4 tempLightCoords = vec4(lightCoordinates.xyz,1.0);
-	tempLightCoords = viewMatrix*tempLightCoords;
+	tempLightCoords = currentViewMatrix*tempLightCoords;
 	LightCoordinates = vec3(tempLightCoords[0],tempLightCoords[1],tempLightCoords[2]);
 	UV = vertexUV;
 

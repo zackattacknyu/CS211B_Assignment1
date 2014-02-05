@@ -91,6 +91,7 @@ bool showTrueColor = false;
 GLuint texturePointer, uvLoc, textureLocation;
 GLuint frameBuffer, pickingTexture, depthTexture;
 GLuint showTrueColorLocation;
+GLuint currentViewMatrixLoc;
 
 GLuint drawIndexLocation,drawIndex;
 GLuint objectIndex, objectIndexLocation;
@@ -223,6 +224,7 @@ GLuint vert[10];
 // storage for matrices
 float* projMatrix = new float[16];
 float* viewMatrix = new float[16];
+float* currentViewMatrix = new float[16];
 
 float myAngle = 0.0f;
 float myAngle2 = 0.0f;
@@ -460,6 +462,8 @@ void placeCam(float posX, float posY, float posZ, float lookX, float lookY, floa
 
 	modelViewMatrix_stack.pop();
 	modelViewMatrix_stack.push(tempViewMatrix);
+
+	currentViewMatrix = tempViewMatrix;
 	
 	// you should do this instead. If you want to apply rotation to your viewMatrix.
 	//multiplyMatrix(viewMatrix, rotationMatrix(0.0,0.0,1.0, 0.785)); 
@@ -730,6 +734,7 @@ void setUniforms() {
 	viewMatrix = modelViewMatrix_stack.top();
     glUniformMatrix4fv(projMatrixLoc,  1, false, projMatrix);
     glUniformMatrix4fv(viewMatrixLoc,  1, false, viewMatrix);
+	glUniformMatrix4fv(currentViewMatrixLoc,1,false,currentViewMatrix);
 
 	float vector[] = {0,1,0,0};
 	glUniform4fv(axisLocation,1,vector);
@@ -933,6 +938,7 @@ GLuint initShaders() {
 
 	drawIndexLocation = glGetUniformLocation(p,"gDrawIndex");
 	objectIndexLocation = glGetUniformLocation(p,"gObjectIndex");
+	currentViewMatrixLoc = glGetUniformLocation(p,"currentViewMatrix");
 
     return(p);
 }
