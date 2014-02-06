@@ -58,20 +58,6 @@ void main()
 	vec4 axis = vec4(2.0,0.0,0.0,0.0);
 	vec3 pos = vec3(0.0,0.0,0.0);
     Color = color;
-	//Position = viewMatrix *position;
-	//Position = currentViewMatrix * position;
-	//Position = position;
-	Position = projMatrix*viewMatrix*position;
-
-	if(lightMode == 0){
-		Position = projMatrix*viewMatrix*position;
-	}else if(lightMode == 1){
-		Position = viewMatrix*position;
-	}else if(lightMode == 2){
-		Position = currentViewMatrix*position;
-	}else if(lightMode == 3){
-		Position = position;
-	}
 
 	// Matrix multiplication is not commutative, i.e. the order of operations matters. 
 	// The transformations on a vertex' position, in order are:
@@ -86,6 +72,20 @@ void main()
 	gl_Position = projMatrix * viewMatrix * position ;
 
 	vec4 tempLightCoords = vec4(lightCoordinates.xyz,1.0);
+
+
+	if(lightMode == 0){
+		//light should stay stationary
+		Position = projMatrix*viewMatrix*position;
+	}else if(lightMode == 1){
+		Position = viewMatrix*position;
+	}else if(lightMode == 2){
+		Position = currentViewMatrix*position;
+	}else if(lightMode == 3){
+		//light stays stationary when object moves
+		Position = viewMatrix* position;
+		tempLightCoords = viewMatrix*tempLightCoords;
+	}
 
 	if(lightMode == 0){
 
