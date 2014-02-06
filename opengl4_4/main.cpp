@@ -969,7 +969,7 @@ void readKeyboard( unsigned char key, int x, int y ){
   switch( key ){
 	  case  0x1B: /* esc */
 	  case 'b':
-		  lightMode = (lightMode + 1)%2;
+		  lightMode = (lightMode + 1)%3;
 		  printf("Light Mode: %d\n",lightMode);
 		  break;
 	  case  't':

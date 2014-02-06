@@ -77,37 +77,23 @@ void main()
 	if(lightMode == 0){
 
 		//light should stay stationary. 
-		//KEEP THIS ONE
 		Position = projMatrix*viewMatrix*position;
+
 	}else if(lightMode == 1){
 
 		//light stays stationary with respect to object and camera
-		//KEEP THIS ONE
 		Position = viewMatrix* position;
+		tempLightCoords = viewMatrix*tempLightCoords;
+
+	}else if(lightMode == 2){
+		
+		//here is the light stays stationary when you move the camera
+		//		but not when you move the object
+		Position = currentViewMatrix*position;
 		tempLightCoords = viewMatrix*tempLightCoords;
 	}
 
-	if(lightMode == 0){
 
-		//light coordinates are static
-		//good one. light stays stationary 
-
-	}else if(lightMode == 1){
-		
-		//light coordinates multiplied by view matrix
-		//tempLightCoords = currentViewMatrix*tempLightCoords;
-		//tempLightCoords = projMatrix*tempLightCoords;
-	
-	}else if(lightMode == 2){
-		
-		//light coordinates multiplied by model-view matrix
-		//tempLightCoords = viewMatrix*tempLightCoords;
-	
-	}else if(lightMode == 3){
-
-		//good one. Light will follow the object
-		//tempLightCoords = projMatrix * viewMatrix * tempLightCoords;
-	}
 	LightCoordinates = vec3(tempLightCoords[0],tempLightCoords[1],tempLightCoords[2]);
 	UV = vertexUV;
 
