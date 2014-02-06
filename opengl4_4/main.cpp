@@ -1214,6 +1214,8 @@ int main(int argc, char **argv)
     glClearColor(0.5,0.5,0.5,1.0);
     p = initShaders(); 
     setupBuffers(); 
+	printf("Initial Light Mode: 1\n");
+	printf("Light stays stationary with respect to object and camera\n\n");
     glutMainLoop();
 
     return(0); 
