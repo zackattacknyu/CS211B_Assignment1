@@ -48,8 +48,8 @@ struct PixelInfo {
 struct{GLubyte redComponent, greenComponent, blueComponent;} pixelColorInfo;
 //lighting Coordinates
 float lightX = 0.0f;
-float lightY = -1.0f;
-float lightZ = 3.0f;
+float lightY = 1.0f;
+float lightZ = 1.5f;
 
 //scaling coordinates
 float scaleX = 1.0f;
@@ -61,7 +61,7 @@ int lastMouseX;
 int lastMouseY;
 
 //light moving mode
-int lightMode = 0;
+int lightMode = 1;
 GLuint lightModeLocation;
 
 //placeCam(0,0,-10,0,0,-5);
