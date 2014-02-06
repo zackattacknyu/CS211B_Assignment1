@@ -58,7 +58,21 @@ void main()
 	vec4 axis = vec4(2.0,0.0,0.0,0.0);
 	vec3 pos = vec3(0.0,0.0,0.0);
     Color = color;
-	Position = viewMatrix *position;
+	//Position = viewMatrix *position;
+	//Position = currentViewMatrix * position;
+	//Position = position;
+	Position = projMatrix*viewMatrix*position;
+
+	if(lightMode == 0){
+		Position = projMatrix*viewMatrix*position;
+	}else if(lightMode == 1){
+		Position = viewMatrix*position;
+	}else if(lightMode == 2){
+		Position = currentViewMatrix*position;
+	}else if(lightMode == 3){
+		Position = position;
+	}
+
 	// Matrix multiplication is not commutative, i.e. the order of operations matters. 
 	// The transformations on a vertex' position, in order are:
 	// model
@@ -76,17 +90,23 @@ void main()
 	if(lightMode == 0){
 
 		//light coordinates are static
+		//good one. light stays stationary 
 
 	}else if(lightMode == 1){
 		
 		//light coordinates multiplied by view matrix
-		tempLightCoords = currentViewMatrix*tempLightCoords;
+		//tempLightCoords = currentViewMatrix*tempLightCoords;
+		//tempLightCoords = projMatrix*tempLightCoords;
 	
 	}else if(lightMode == 2){
 		
 		//light coordinates multiplied by model-view matrix
-		tempLightCoords = viewMatrix*tempLightCoords;
+		//tempLightCoords = viewMatrix*tempLightCoords;
 	
+	}else if(lightMode == 3){
+
+		//good one. Light will follow the object
+		//tempLightCoords = projMatrix * viewMatrix * tempLightCoords;
 	}
 	LightCoordinates = vec3(tempLightCoords[0],tempLightCoords[1],tempLightCoords[2]);
 	UV = vertexUV;

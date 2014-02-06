@@ -48,9 +48,8 @@ struct PixelInfo {
 struct{GLubyte redComponent, greenComponent, blueComponent;} pixelColorInfo;
 //lighting Coordinates
 float lightX = 0.0f;
-float lightY = -1.2f;
-float lightZ = 0.0f;
-float lightW = 1.0f;
+float lightY = 0.0f;
+float lightZ = -0.5f;
 
 //scaling coordinates
 float scaleX = 1.0f;
@@ -966,10 +965,12 @@ int xOrigin = -1;
 
 void readKeyboard( unsigned char key, int x, int y ){
 	float newRange;
+	//printf("Key Pressed: %d\n",key);
   switch( key ){
 	  case  0x1B: /* esc */
 	  case 'b':
-		  lightMode = (lightMode + 1)%3;
+		  lightMode = (lightMode + 1)%4;
+		  printf("Light Mode: %d\n",lightMode);
 		  break;
 	  case  't':
 		  transparent = !transparent;
@@ -1060,6 +1061,27 @@ void readKeyboard( unsigned char key, int x, int y ){
 		  break;
 	  case 'v':
 		  diffuse = !diffuse;
+		  break;
+
+		  //make translation possible with keyboard
+	  case '2':
+		  //down in number pad
+		  ydistance = ydistance - 0.1;
+		  break;
+
+	  case '4':
+		  //left in number pad
+		  xdistance = xdistance - 0.1;
+		  break;
+
+	  case '6':
+		  //right in number pad
+		  xdistance = xdistance + 0.1;
+		  break;
+
+	  case '8':
+		  //up in number pad
+		  ydistance = ydistance + 0.1;
 		  break;
 	  glutPostRedisplay( );
 	}
