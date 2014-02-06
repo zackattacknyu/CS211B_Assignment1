@@ -971,6 +971,13 @@ void readKeyboard( unsigned char key, int x, int y ){
 	  case 'b':
 		  lightMode = (lightMode + 1)%3;
 		  printf("Light Mode: %d\n",lightMode);
+		  if(lightMode == 0){
+			  printf("Light is stationary in scene\n\n");
+		  }else if(lightMode == 1){
+			  printf("Light stays stationary with respect to object and camera\n\n");
+		  }else if(lightMode == 2){
+			  printf("Light stays stationary with respect to camera but not object\n\n");
+		  }
 		  break;
 	  case  't':
 		  transparent = !transparent;
