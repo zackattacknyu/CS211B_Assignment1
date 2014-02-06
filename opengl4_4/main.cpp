@@ -48,8 +48,8 @@ struct PixelInfo {
 struct{GLubyte redComponent, greenComponent, blueComponent;} pixelColorInfo;
 //lighting Coordinates
 float lightX = 0.0f;
-float lightY = 0.0f;
-float lightZ = -0.5f;
+float lightY = -1.0f;
+float lightZ = 3.0f;
 
 //scaling coordinates
 float scaleX = 1.0f;
@@ -1117,7 +1117,6 @@ void mouseMove(int x, int y)
 		zdistance = zdistance + (y - startY)/10.0;
 		startX = x;
 		startY = y;
-		factor = (cameraZ - zdistance)/(cameraZ);
 	}
 }
 
